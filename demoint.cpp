@@ -105,50 +105,16 @@ DemoInt &DemoInt::operator =(DemoInt &other)
 }
 
 
-void DemoInt::swap(DemoInt &v1, DemoInt &v2)                                    // non-const reference seems to fit nice here...
-{
-#ifdef DEMO_INT_LIMIT
-    if (v1.uses_left_ <= 0)
-    {
-        v1.display_limit_msg_(__FUNCTION__);
-
-        return;
-    }
-    if (v2.uses_left_ <= 0)
-    {
-        v2.display_limit_msg_(__FUNCTION__);
-
-        return;
-    }
-    else
-    {
-        --v1.uses_left_;
-        --v2.uses_left_;
-    }
-#endif
-#ifdef DEMO_INT_HISTORY
-    std::string add_to_history_v1 = "Was swapped with \"" + v2.name_ + 
-                                    "\"(" + std::to_string(v2.value_) + "); ";
-    std::string add_to_history_v2 = "Was swapped with \"" + v1.name_ +
-                                    "\"(" + std::to_string(v1.value_) + "); ";
-    v1.history_ += add_to_history_v1;
-    v2.history_ += add_to_history_v2;
-#ifdef DEMO_INT_LOGS
-    logs_stream_ << "\"" << v1.name_ << "\"(" << v1.value_ << ") was swapped with \"" <<
-    v2.name_ << "\"(" << v2.value_ << ")" << std::endl; 
-#endif
-#endif
-
-    int t     = v1.value_;
-    v1.value_ = v2.value_;
-    v2.value_ = t;
-}
-
 void DemoInt::set_value(const int value)
 {
     value_ = value;
 }
 
+
+DemoInt::operator int() const
+{
+    return value_;
+}
 
 DemoInt &DemoInt::operator +=(DemoInt &other)
 {
@@ -1251,9 +1217,212 @@ bool DemoInt::operator >=(DemoInt &other)
 }
 
 
+DemoInt &DemoInt::operator =(const int other)
+{
+    DEMO_INT_CTOR(converted_int, other);
+    return operator =(converted_int);
+}
+
+DemoInt &DemoInt::operator +=(const int other)
+{
+    DEMO_INT_CTOR(converted_int, other);
+    return operator +=(converted_int);
+}
+
+DemoInt &DemoInt::operator -=(const int other)
+{
+    DEMO_INT_CTOR(converted_int, other);
+    return operator -=(converted_int);
+}
+
+DemoInt &DemoInt::operator *=(const int other)
+{
+    DEMO_INT_CTOR(converted_int, other);
+    return operator *=(converted_int);
+}
+
+DemoInt &DemoInt::operator /=(const int other)
+{
+    DEMO_INT_CTOR(converted_int, other);
+    return operator /=(converted_int);
+}
+
+DemoInt &DemoInt::operator %=(const int other)
+{
+    DEMO_INT_CTOR(converted_int, other);
+    return operator %=(converted_int);
+}
+
+DemoInt &DemoInt::operator ^=(const int other)
+{
+    DEMO_INT_CTOR(converted_int, other);
+    return operator ^=(converted_int);
+}
+
+DemoInt &DemoInt::operator &=(const int other)
+{
+    DEMO_INT_CTOR(converted_int, other);
+    return operator &=(converted_int);
+}
+
+DemoInt &DemoInt::operator |=(const int other)
+{
+    DEMO_INT_CTOR(converted_int, other);
+    return operator |=(converted_int);
+}
+
+DemoInt &DemoInt::operator <<=(const int other)
+{
+    DEMO_INT_CTOR(converted_int, other);
+    return operator <<=(converted_int);
+}
+
+DemoInt &DemoInt::operator >>=(const int other)
+{
+    DEMO_INT_CTOR(converted_int, other);
+    return operator >>=(converted_int);
+}
+
+DemoInt DemoInt::operator +(const int other)
+{
+    DEMO_INT_CTOR(converted_int, other);
+    return operator +(converted_int);
+}
+
+DemoInt DemoInt::operator -(const int other)
+{
+    DEMO_INT_CTOR(converted_int, other);
+    return operator -(converted_int);
+}
+
+DemoInt DemoInt::operator *(const int other)
+{
+    DEMO_INT_CTOR(converted_int, other);
+    return operator *(converted_int);
+}
+
+DemoInt DemoInt::operator /(const int other)
+{
+    DEMO_INT_CTOR(converted_int, other);
+    return operator /(converted_int);
+}
+
+DemoInt DemoInt::operator %(const int other)
+{
+    DEMO_INT_CTOR(converted_int, other);
+    return operator %(converted_int);
+}
+
+DemoInt DemoInt::operator ^(const int other)
+{
+    DEMO_INT_CTOR(converted_int, other);
+    return operator ^(converted_int);
+}
+
+DemoInt DemoInt::operator &(const int other)
+{
+    DEMO_INT_CTOR(converted_int, other);
+    return operator &(converted_int);
+}
+
+DemoInt DemoInt::operator |(const int other)
+{
+    DEMO_INT_CTOR(converted_int, other);
+    return operator |(converted_int);
+}
+
+DemoInt DemoInt::operator <<(const int other)
+{
+    DEMO_INT_CTOR(converted_int, other);
+    return operator <<(converted_int);
+}
+
+DemoInt DemoInt::operator >>(const int other)
+{
+    DEMO_INT_CTOR(converted_int, other);
+    return operator >>(converted_int);
+}
+
+bool DemoInt::operator < (const int other)
+{
+    DEMO_INT_CTOR(converted_int, other);
+    return operator < (converted_int);
+}
+
+bool DemoInt::operator > (const int other)
+{
+    DEMO_INT_CTOR(converted_int, other);
+    return operator > (converted_int);
+}
+
+bool DemoInt::operator ==(const int other)
+{
+    DEMO_INT_CTOR(converted_int, other);
+    return operator ==(converted_int);
+}
+
+bool DemoInt::operator !=(const int other)
+{
+    DEMO_INT_CTOR(converted_int, other);
+    return operator !=(converted_int);
+}
+
+bool DemoInt::operator <=(const int other)
+{
+    DEMO_INT_CTOR(converted_int, other);
+    return operator <=(converted_int);
+}
+
+bool DemoInt::operator >=(const int other)
+{
+    DEMO_INT_CTOR(converted_int, other);
+    return operator >=(converted_int);
+}
+
+
 void DemoInt::display_limit_msg_(const std::string &op_symb_str)
 {
     std::cout << LIMIT_REACHED_MESSAGE_PART1 << " ";
     std::cout << op_symb_str << " ";
     std::cout << LIMIT_REACHED_MESSAGE_PART2 << " " << name_ << "." << LIMIT_REACHED_MESSAGE_PART3 << std::endl; 
+}
+
+
+void swap(DemoInt &v1, DemoInt &v2)
+{
+#ifdef DEMO_INT_LIMIT
+    if (v1.uses_left_ <= 0)
+    {
+        v1.display_limit_msg_(__FUNCTION__);
+
+        return;
+    }
+    if (v2.uses_left_ <= 0)
+    {
+        v2.display_limit_msg_(__FUNCTION__);
+
+        return;
+    }
+    else
+    {
+        --v1.uses_left_;
+        --v2.uses_left_;
+    }
+#endif
+#ifdef DEMO_INT_HISTORY
+    std::string add_to_history_v1 = "Was swapped with \"" + v2.name_ + 
+                                    "\"(" + std::to_string(v2.value_) + "); ";
+    std::string add_to_history_v2 = "Was swapped with \"" + v1.name_ +
+                                    "\"(" + std::to_string(v1.value_) + "); ";
+    v1.history_ += add_to_history_v1;
+    v2.history_ += add_to_history_v2;
+#ifdef DEMO_INT_LOGS
+    v1.logs_stream_ << "\"" << v1.name_ << "\"(" << v1.value_ << ") was swapped with \"" <<
+    v2.name_ << "\"(" << v2.value_ << ")" << std::endl; 
+#endif
+#endif
+
+    int t     = v1.value_;
+    v1.value_ = v2.value_;
+    v2.value_ = t;
 }
