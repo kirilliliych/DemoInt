@@ -1,6 +1,16 @@
 #include "demoint.hpp"
 
 
+const size_t OPERATOR_WORD_SIZE                = 9;
+const size_t MAX_DEMO_VERSION_OPERATIONS_LIMIT = 7; 
+
+static const char *LIMIT_REACHED_MESSAGE_PART1 = "Sorry, you have reached the limit of operation";
+static const char *LIMIT_REACHED_MESSAGE_PART2 = "with variable";
+static const char *LIMIT_REACHED_MESSAGE_PART3 = "Please buy license for 228 dollars.\n";
+
+size_t TEMPORARY_VARIABLES_COUNTER = 0;
+
+
 std::string &cut_operator_word(std::string *operator_func_name)
 {
     operator_func_name->erase(0, OPERATOR_WORD_SIZE);
@@ -18,7 +28,8 @@ DemoInt::DemoInt(const int value, const std::string &name, std::ostream &logs_st
 {
     if (name_ == "")
     {
-        name_ += " (temporary variable) ";
+        name_ += " (temporary variable №" + std::to_string(TEMPORARY_VARIABLES_COUNTER) + ") ";
+        ++TEMPORARY_VARIABLES_COUNTER;
     }
 
 #ifdef DEMO_INT_HISTORY
@@ -54,7 +65,8 @@ DemoInt::DemoInt(DemoInt &other, const std::string &name, std::ostream &logs_str
 
     if (name_ == "")
     {
-        name_ += " (temporary variable) ";
+        name_ += " (temporary variable №" + std::to_string(TEMPORARY_VARIABLES_COUNTER) + ") ";
+        ++TEMPORARY_VARIABLES_COUNTER;
     }
 
 #ifdef DEMO_INT_HISTORY

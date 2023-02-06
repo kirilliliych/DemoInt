@@ -8,16 +8,7 @@
 
 
 #define DEMO_INT_HISTORY
-#define DEMO_INT_LOGS
 #define DEMO_INT_LIMIT
-
-
-const size_t OPERATOR_WORD_SIZE                = 9;
-const size_t MAX_DEMO_VERSION_OPERATIONS_LIMIT = 7; 
-
-static const char *LIMIT_REACHED_MESSAGE_PART1 = "Sorry, you have reached the limit of operation";
-static const char *LIMIT_REACHED_MESSAGE_PART2 = "with variable";
-static const char *LIMIT_REACHED_MESSAGE_PART3 = "Please buy license for 228 dollars\n";
                                   
 
 class DemoInt;
