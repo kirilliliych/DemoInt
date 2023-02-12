@@ -1,48 +1,32 @@
 #include "demoint.hpp"
+#include "graphdrawer.hpp"
 
 
-const size_t ARR_TO_SORT_SIZE = 12;
-
-
-DemoInt demo_selection_sort_get_smallest_elem_index(DemoInt *array, DemoInt cur_index, DemoInt array_size)
+DemoInt demoint_sum(const DemoInt &val1, const DemoInt &val2)
 {
-    assert(array != nullptr);
-     
-    if (array_size <= 1)
-    {
-        return cur_index;
-    }
+    DEMO_INT_CTOR(demoint_sum, val1 + val2);
 
-    DemoInt subarray_result = demo_selection_sort_get_smallest_elem_index(array, cur_index + 1, array_size - 1);
-
-    return array[subarray_result] > array[cur_index] ? cur_index : subarray_result;                            //
+    return demoint_sum;
 }
 
-void demo_selection_sort(DemoInt *array, DemoInt *result, DemoInt cur_index, DemoInt array_size)
-{
-    assert(array  != nullptr);
-    assert(result != nullptr);
-
-    DemoInt index_with_smallest_elem = demo_selection_sort_get_smallest_elem_index(array, cur_index, array_size);
-    result[cur_index] = array[index_with_smallest_elem];
-    array[index_with_smallest_elem] = array[cur_index]; // 
-
-    if (array_size > 1)
-    {
-        demo_selection_sort(array, result, cur_index + 1, array_size - 1);
-    }
-}
 
 int main()
 {
-    DemoInt array_to_sort[ARR_TO_SORT_SIZE] = {10, 15, 1, -5, -228, -1337, 86, 100, 7, 14, -13, -1000};
+    DEMO_INT_CTOR(var1, 30);
+    DEMO_INT_CTOR(var2, 67);
+    DEMO_INT_CTOR(var3, -54);
 
-    DemoInt result[ARR_TO_SORT_SIZE] = {0};
-    demo_selection_sort(array_to_sort, result, 0, ARR_TO_SORT_SIZE);
-    for (int i = 0; i < ARR_TO_SORT_SIZE; ++i)
-    {
-        std::cout << result[i] << " ";
-    }
+    DEMO_INT_CTOR(abcde, 5);
+
+    // abcde = var1 + var2;
+    // std::cout << "name: " << abcde.name_ << std::endl;
+    // std::cout << "value: " << abcde.value_ << std::endl;
+    // std::cout << "history: " << abcde.history_ << std::endl;
+    DEMO_INT_CTOR(result, -var1 + var2 + var3);
+    // DEMO_INT_CTOR(aboba,  (var1 + var2) / var3);
+
+    // std::string do_graph_str = "dot -Tpng " + DEFAULT_GRAPH_SOURCE_FILE_NAME + " -o " + DEFAULT_GRAPH_PICTURE_FILE_NAME;
+    // system(do_graph_str.c_str()); 
 
     return 0;
 }
