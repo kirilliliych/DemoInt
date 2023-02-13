@@ -6,7 +6,7 @@ This program is devoted to the topic of copy/move semantics.
 ## Brief introduction
 C++11 provided us plenty of new things, and in this whole bunch such novelties
 as __rvalue references__ and __move semantics__ can be noticed. Although it may seem
-that these entities are peculiarly similar to lvalue references and copy semantics, accordingly,
+that these entities are peculiarly similar to lvalue references and copy semantics accordingly,
 they introduce some new ideas in C++.
 
 ***
@@ -50,8 +50,8 @@ Situation is quite similar with assignment operators.
 
 ***
 ## Investigation
-Here only 2) and 3) versions will be used; other two are used seldom or not used at all.
-The program can be found in `main.cpp`. It creates two variables, sums them and puts
+Only 2) and 3) points will be used; other two are used seldom or not used at all.
+The program is in `main.cpp` and is quite simple. It creates two variables, sums them and puts
 the result to the third variable; then it gets divided by the first variable and
 result is put to the fourth variable. Our goal is to decrease the number of copy operations
 by changing them to move operations as we consider that each copy operation takes
