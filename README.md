@@ -1,6 +1,6 @@
 # DemoInt(Tracked copy/move semantics)
 
-This program is devoted to the topic of copy/move semantics.
+This repository is devoted to the topic of copy/move semantics.
 
 ***
 ## Brief introduction
