@@ -55,10 +55,33 @@ The program can be found in `main.cpp`. It creates two variables, sums them and 
 the result to the third variable; then it gets divided by the first variable and
 result is put to the fourth variable. Our goal is to decrease the number of copy operations
 by changing them to move operations as we consider that each copy operation takes
-__significantly__ more time than move operation does.
+__significantly__ more time than move operation does. It should be mentioned that the program
+was compiled with `-fno-elide-constructors` flag to prevent automatic optimizations.
 
 ### Only const copy constructor
 Move constructors are disabled in this case, so the whole situation is quite disappointing.
-Quantity of copy constuctor calls with plenty of temporary variables tell us program is 
-really slow and uneffective:
+Quantity of copy constuctor calls and plenty of temporary variables tell us program is 
+really slow and uneffective(six copy operations and four temporary variables!): 
 ![ALT](pictures/only_copy_ctor.png)
+
+### Copy and move constructors
+Now move constructors are enabled, and therefore the whole picture looks better. However,
+we still have two copy operations and four temporary variables (but now there are four moves):
+![ALT](pictures/copy_and_move_ctors.png)
+
+### Slight optimization made by hands
+Soon after move constructors were enabled, a little inefficiency was noticed in the code 
+inside BINARY_OP_DEMOINT define.
+`DemoInt this_copy = *this; this_copy op_symb other` was changed to 'DemoInt this_copy(this->value_ op_symb other.value_)'.
+The result is zero copies, four moves, but still 
+![ALT](pictures/explicit_copy_removed.png)
+
+### Compiler's copy elision
+Now we allow compiler to optimize our program. This gives us a significant boost in efficiency,
+because we omit two temporary variables, leaving two more and two move operations:
+![ALT](pictures/copy_elision.png)
+
+## Conclusion
+All in all, a part of copy constructors might be changed to move constructors. Move semantics
+provides faster operations via shallow copying, but lacks safety. In its turn, copy semantics
+gives us certainty that nothing will be corrupted, but it is really slow.
