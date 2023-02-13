@@ -61,24 +61,24 @@ was compiled with `-fno-elide-constructors` flag to prevent automatic optimizati
 ### Only const copy constructor
 Move constructors are disabled in this case, so the whole situation is quite disappointing.
 Quantity of copy constuctor calls and plenty of temporary variables tell us program is 
-really slow and uneffective(six copy operations and four temporary variables!): 
+really slow and uneffective (__six__ copy operations and __four__ temporary variables!): 
 ![ALT](pictures/only_copy_ctor.png)
 
 ### Copy and move constructors
 Now move constructors are enabled, and therefore the whole picture looks better. However,
-we still have two copy operations and four temporary variables (but now there are four moves):
+we still have __two__ copy operations and __four__ temporary variables (but now there are __four__ moves):
 ![ALT](pictures/copy_and_move_ctors.png)
 
 ### Slight optimization made by hands
 Soon after move constructors were enabled, a little inefficiency was noticed in the code 
 inside BINARY_OP_DEMOINT define.
 `DemoInt this_copy = *this; this_copy op_symb other` was changed to 'DemoInt this_copy(this->value_ op_symb other.value_)'.
-The result is zero copies, four moves, but still 
+The result is __zero__ copies, __four__ moves, but still 
 ![ALT](pictures/explicit_copy_removed.png)
 
 ### Compiler's copy elision
 Now we allow compiler to optimize our program. This gives us a significant boost in efficiency,
-because we omit two temporary variables, leaving two more and two move operations:
+because we omit two temporary variables, leaving __two__ more and __two__ move operations:
 ![ALT](pictures/copy_elision.png)
 
 ## Conclusion
