@@ -33,13 +33,21 @@ public:
 
     void create_edge(const DemoInt &from, const OpNode &to, const char *color,
                      const char *label, const char *label_color) const;
-                     
+
     void create_edge(const OpNode &from, const DemoInt &to, const char *color,
                      const char *label, const char *label_color) const;
+
+    void create_edge(const DemoInt &from, const DemoInt &to, const char *color,
+                     const char *label, const char *label_color) const;
+
+    void enter_cluster(std::experimental::source_location location = std::experimental::source_location::current()) const;
+
+    void exit_cluster() const;
 //--------------------Variables-----------------------
 private:
 
     static size_t op_counter_;
+    static size_t cluster_counter_;
 
     FILE *graph_source_file_        = nullptr;
     std::string graph_picture_name_ = "";

@@ -37,11 +37,11 @@ public:
 #endif
 
 #ifdef MOVE_CTOR
-#endif
-    //DemoInt(const DemoInt &other);
+    DemoInt(DemoInt &&other, const std::string &name = "", std::ostream &logs_stream = std::cout,
+            const std::experimental::source_location location = std::experimental::source_location::current());
 
-    //DemoInt(const DemoInt &&other);
-    //DemoInt(DemoInt &&other);
+    DemoInt &operator =(DemoInt &&other);
+#endif
 
 //-------------------------------------------------------------
     void set_value(const int value);
@@ -129,7 +129,6 @@ public:
 private:
 
     void display_limit_msg_(const char *op_symb_str) const;
-public:
 //------------------------Variables----------------------------
     std::string name_           = "";
     mutable size_t uses_left_   = 0;
