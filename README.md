@@ -27,7 +27,7 @@ its owner. A nice example is a class containing a pointer to an array with data;
 copy only the pointers, not the whole information, so we have natural trouble: who should delete the array?
 This way of copying is used by default by compiler.
 
-### Deep copying,
+### Deep copying
 Unlike shallow copying, deep copying clones the whole information. As a result, the copy is "independent",
 but such actions demand more resources such as memory and time to be completed. Briefly speaking, it is 
 slow and expensive, but reliable solution. In the case of array described above the copy will receive its
