@@ -11,8 +11,9 @@ they introduce some new ideas in C++.
 
 ***
 ## Rvalue references
-The main purpose of rvalue references(they are marked like
-*&&* - two ampersands) is to deal with temporary objects(which are to be destroyed soon).
+The main purpose of rvalue references (they are marked like
+*&&* - two ampersands) is to deal with temporary objects 
+(which are to be destroyed soon).
 
 ***
 ## Copy semantics reminder
