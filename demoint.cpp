@@ -9,40 +9,47 @@ static const char *LIMIT_REACHED_MESSAGE_PART1 = "Sorry, you have reached the li
 static const char *LIMIT_REACHED_MESSAGE_PART2 = "with variable";
 static const char *LIMIT_REACHED_MESSAGE_PART3 = "Please buy license for 228 dollars.\n";
 
-const GraphDrawer GRAPH_DRAWER_SINGLETON{};
-
 
 size_t DemoInt::temp_counter_ = 0;
 
 
+const char *cut_operator_word(std::string *str)
+{
+    assert(str != nullptr);
+
+    return str->substr(OPERATOR_WORD_SIZE).c_str();
+}
+
+
 DemoInt::DemoInt(const int value, const std::string &name, std::ostream &logs_stream,
                  const std::experimental::source_location location)
-  : value_(value),
-    name_(name),
+  : name_(name),
     uses_left_(MAX_DEMO_VERSION_OPERATIONS_LIMIT),
-    logs_stream_(logs_stream)
+    logs_stream_(logs_stream),
+    history_(""),
+    value_(value)
 {
-    GRAPH_DRAWER_SINGLETON.enter_cluster();
+    GRAPH_DRAWER_SINGLETON.enter_cluster(LOCATION);
 
     if (name_ == "")
     {
         name_ += "temp" + std::to_string(temp_counter_);
         ++temp_counter_;
 
-        GRAPH_DRAWER_SINGLETON.create_var_node(*this, "red");
+        GRAPH_DRAWER_SINGLETON.create_var_node(*this, TEMP_VARIABLE_NODE_COLOR,
+                                                      TEMP_VARIABLE_NODE_FILL_COLOR);
     }
     else
     {
-        GRAPH_DRAWER_SINGLETON.create_var_node(*this, "aqua");
+        GRAPH_DRAWER_SINGLETON.create_var_node(*this, EXPLICIT_VARIABLE_COLOR,
+                                                      EXPLICIT_VARIABLE_FILL_COLOR);
     }
 
-//#ifdef DEMO_INT_HISTORY
     std::string add_to_history = "DemoInt '" + name_ + "'(" + std::to_string(value_)  +
                                  ")" + " was created in FILE " + location.file_name() +
                                  " FUNCTION " + location.function_name() + " LINE "   +
                                  std::to_string(location.line()) + "; ";
     history_ += add_to_history;
-//#endif
 
     GRAPH_DRAWER_SINGLETON.exit_cluster();
 }
@@ -55,9 +62,8 @@ DemoInt::DemoInt(const DemoInt &other, const std::string &name, std::ostream &lo
     uses_left_(MAX_DEMO_VERSION_OPERATIONS_LIMIT),
     logs_stream_(logs_stream)
 {
-    GRAPH_DRAWER_SINGLETON.enter_cluster();
+    GRAPH_DRAWER_SINGLETON.enter_cluster(LOCATION);
     
-#ifdef DEMO_INT_LIMIT
     if (other.uses_left_ <= 0)
     {
         std::string func_name = "copy";
@@ -69,38 +75,36 @@ DemoInt::DemoInt(const DemoInt &other, const std::string &name, std::ostream &lo
     {
         --other.uses_left_;
     }
-#endif
 
     if (name_ == "")
     {
         name_ += "temp" + std::to_string(temp_counter_);
         ++temp_counter_;
 
-        GRAPH_DRAWER_SINGLETON.create_var_node(*this, "red");
+        GRAPH_DRAWER_SINGLETON.create_var_node(*this, TEMP_VARIABLE_NODE_COLOR,
+                                                      TEMP_VARIABLE_NODE_FILL_COLOR);
     }
     else
     {
-        GRAPH_DRAWER_SINGLETON.create_var_node(*this, "aqua");
+        GRAPH_DRAWER_SINGLETON.create_var_node(*this, EXPLICIT_VARIABLE_COLOR,
+                                                      EXPLICIT_VARIABLE_FILL_COLOR);
     }
-    GRAPH_DRAWER_SINGLETON.create_edge(other, *this, "red", "COPY COPY OMG!!111", "red");
-    
 
-//#ifdef DEMO_INT_HISTORY
+    GRAPH_DRAWER_SINGLETON.create_edge(other, *this, COPY_EDGE_COLOR, "COPY COPY OMG!!111", COPY_EDGE_LABEL_COLOR);
+    
     std::string add_to_history = "DemoInt '" + name_ + "' was created in FILE " +
                                  location.file_name() + " FUNCTION " + location.function_name() +
                                  " LINE " + std::to_string(location.line()) + " by copying DemoInt '" +
                                  other.name_ + "' (" + std::to_string(other.value_ ) + "); ";
     history_ += add_to_history;
-//#endif
 
     GRAPH_DRAWER_SINGLETON.exit_cluster();
 }
 
 DemoInt &DemoInt::operator =(const DemoInt &other)
 {
-    GRAPH_DRAWER_SINGLETON.enter_cluster();
+    GRAPH_DRAWER_SINGLETON.enter_cluster(LOCATION);
 
-#ifdef DEMO_INT_LIMIT
     if (uses_left_ <= 0)
     {
         std::string func_name = __FUNCTION__;
@@ -120,15 +124,13 @@ DemoInt &DemoInt::operator =(const DemoInt &other)
         --uses_left_;
         --other.uses_left_;
     }
-#endif
 
     value_ = other.value_;
     
-    GRAPH_DRAWER_SINGLETON.create_edge(other, *this, "red", "COPY = DISGUSTING", "red");
+    GRAPH_DRAWER_SINGLETON.create_edge(other, *this, COPY_EDGE_COLOR, "COPY ASSIGNMENT!", COPY_EDGE_LABEL_COLOR);
 
-#ifdef DEMO_INT_HISTORY
     std::string add_to_history = "= '" + other.name_ + "'(" + std::to_string(other.value_) + "); ";
-#endif
+    history_ += add_to_history;
 
     GRAPH_DRAWER_SINGLETON.exit_cluster();
 
@@ -144,20 +146,22 @@ DemoInt::DemoInt(DemoInt &&other, const std::string &name, std::ostream &logs_st
     uses_left_(MAX_DEMO_VERSION_OPERATIONS_LIMIT),
     logs_stream_(logs_stream)
 {
-    GRAPH_DRAWER_SINGLETON.enter_cluster();
+    GRAPH_DRAWER_SINGLETON.enter_cluster(LOCATION);
 
     if (name_ == "")
     {
         name_ += "temp" + std::to_string(temp_counter_);
         ++temp_counter_;
 
-        GRAPH_DRAWER_SINGLETON.create_var_node(*this, "red");
+        GRAPH_DRAWER_SINGLETON.create_var_node(*this, TEMP_VARIABLE_NODE_COLOR,
+                                                      TEMP_VARIABLE_NODE_FILL_COLOR);
     }
     else
     {
-        GRAPH_DRAWER_SINGLETON.create_var_node(*this, "aqua");
+        GRAPH_DRAWER_SINGLETON.create_var_node(*this, EXPLICIT_VARIABLE_COLOR,
+                                                      EXPLICIT_VARIABLE_FILL_COLOR);
     }
-    GRAPH_DRAWER_SINGLETON.create_edge(other, *this, "forestgreen", "MOVE ^_^", "forestgreen");
+    GRAPH_DRAWER_SINGLETON.create_edge(other, *this, MOVE_EDGE_COLOR, "MOVE ^_^", MOVE_EDGE_LABEL_COLOR);
     
     std::string add_to_history = "DemoInt '" + name_ + "' was created in FILE " +
                                  location.file_name() + " FUNCTION " + location.function_name() +
@@ -170,9 +174,8 @@ DemoInt::DemoInt(DemoInt &&other, const std::string &name, std::ostream &logs_st
 
 DemoInt &DemoInt::operator =(DemoInt &&other)
 {
-    GRAPH_DRAWER_SINGLETON.enter_cluster();
+    GRAPH_DRAWER_SINGLETON.enter_cluster(LOCATION);
 
-#ifdef DEMO_INT_LIMIT
     if (uses_left_ <= 0)
     {
         std::string func_name = __FUNCTION__;
@@ -184,15 +187,13 @@ DemoInt &DemoInt::operator =(DemoInt &&other)
     {
         --uses_left_;
     }
-#endif
 
     value_ = other.value_;
     
-    GRAPH_DRAWER_SINGLETON.create_edge(other, *this, "forestgreen", "= COPY DISGUSTING", "forestgreen");
+    GRAPH_DRAWER_SINGLETON.create_edge(other, *this, MOVE_EDGE_COLOR, "MOVE ASSIGNMENT ^_^", MOVE_EDGE_LABEL_COLOR);
 
-#ifdef DEMO_INT_HISTORY
     std::string add_to_history = "= '" + other.name_ + "'(" + std::to_string(other.value_) + "); ";
-#endif
+    history_ += add_to_history;
 
     GRAPH_DRAWER_SINGLETON.exit_cluster();
 
@@ -234,7 +235,7 @@ DemoInt::operator int() const
 #define UNARY_OP_DEMOINT(op_symb)                                        \
 DemoInt &DemoInt::operator op_symb(const DemoInt &other)                 \
 {                                                                        \
-    GRAPH_DRAWER_SINGLETON.enter_cluster();                              \
+    GRAPH_DRAWER_SINGLETON.enter_cluster(LOCATION);                      \
                                                                          \
     if ((uses_left_ > 0) && (other.uses_left_ > 0))                      \
     {                                                                    \
@@ -290,7 +291,6 @@ UNARY_OP_DEMOINT(>>=)
 
 DemoInt &DemoInt::operator ++()
 {
-#ifdef DEMO_INT_LIMIT
     if (uses_left_ <= 0)
     {
         std::string func_name = __FUNCTION__;
@@ -302,14 +302,10 @@ DemoInt &DemoInt::operator ++()
     {
         --uses_left_;
     }
-#endif
-#ifdef DEMO_INT_HISTORY
+
     std::string add_to_history = "++(prefix); (res " + std::to_string(value_ + 1) + "); ";
     history_ += add_to_history;
-#ifdef DEMO_INT_LOGS
-    logs_stream_ << "\"" << name_ << "\"(" << std::to_string(value_) << ") " << add_to_history << std::endl;
-#endif
-#endif    
+
 
     ++value_;
 
@@ -318,7 +314,6 @@ DemoInt &DemoInt::operator ++()
 
 DemoInt DemoInt::operator ++(int)
 {
-#ifdef DEMO_INT_LIMIT
     if (uses_left_ <= 0)
     {
         std::string func_name = __FUNCTION__;
@@ -330,14 +325,9 @@ DemoInt DemoInt::operator ++(int)
     {
         --uses_left_;
     }
-#endif
-#ifdef DEMO_INT_HISTORY
+
     std::string add_to_history = "(postfix)++; (res " + std::to_string(value_ + 1) + "); ";
     history_ += add_to_history;
-#ifdef DEMO_INT_LOGS
-    logs_stream_ << "\"" << name_ << "\"(" << std::to_string(value_) << ") " << add_to_history << std::endl;
-#endif
-#endif    
 
     DemoInt temp = *this;
     value_++;
@@ -347,7 +337,6 @@ DemoInt DemoInt::operator ++(int)
 
 DemoInt &DemoInt::operator --()
 {
-#ifdef DEMO_INT_LIMIT
     if (uses_left_ <= 0)
     {
         std::string func_name = __FUNCTION__;
@@ -359,14 +348,9 @@ DemoInt &DemoInt::operator --()
     {
         --uses_left_;
     }
-#endif
-#ifdef DEMO_INT_HISTORY
+
     std::string add_to_history = "--(prefix); (res " + std::to_string(value_ - 1) + "); ";
     history_ += add_to_history;
-#ifdef DEMO_INT_LOGS
-    logs_stream_ << "\"" << name_ << "\"(" << std::to_string(value_) << ") " << add_to_history << std::endl;
-#endif
-#endif
 
     --value_;
 
@@ -375,7 +359,6 @@ DemoInt &DemoInt::operator --()
 
 DemoInt DemoInt::operator --(int)
 {
-#ifdef DEMO_INT_LIMIT
     if (uses_left_ <= 0)
     {
         std::string func_name = __FUNCTION__;
@@ -387,14 +370,9 @@ DemoInt DemoInt::operator --(int)
     {
         --uses_left_;
     }
-#endif
-#ifdef DEMO_INT_HISTORY
+
     std::string add_to_history = "(postfix)-- (res " + std::to_string(value_ - 1) + "); ";
     history_ += add_to_history;
-#ifdef DEMO_INT_LOGS
-    logs_stream_ << "\"" << name_ << "\"(" << std::to_string(value_) << ") " << add_to_history << std::endl;
-#endif
-#endif  
 
     DemoInt temp = *this;
     value_--;
@@ -406,7 +384,7 @@ DemoInt DemoInt::operator --(int)
 #define UNARY_OP_NO_ARG_DEMOINT(op_symb)                                \
 DemoInt DemoInt::operator op_symb()                                     \
 {                                                                       \
-    GRAPH_DRAWER_SINGLETON.enter_cluster();                             \
+    GRAPH_DRAWER_SINGLETON.enter_cluster(LOCATION);                     \
                                                                         \
     if (uses_left_ <= 0)                                                \
     {                                                                   \
@@ -435,52 +413,60 @@ UNARY_OP_NO_ARG_DEMOINT(+)
 UNARY_OP_NO_ARG_DEMOINT(-)
 
 
-#define BINARY_OP_DEMOINT(op_symb)                                                    \
-DemoInt DemoInt::operator op_symb(const DemoInt &other)                               \
-{                                                                                     \
-    GRAPH_DRAWER_SINGLETON.enter_cluster();                                           \
-                                                                                      \
-    if ((uses_left_ > 0) && (other.uses_left_ > 0))                                   \
-    {                                                                                 \
-        --uses_left_;                                                                 \
-        --other.uses_left_;                                                           \
-    }                                                                                 \
-    else                                                                              \
-    {                                                                                 \
-        if (uses_left_ <= 0)                                                          \
-        {                                                                             \
-                                                                                      \
-            display_limit_msg_(#op_symb);                                             \
-        }                                                                             \
-        else                                                                          \
-        {                                                                             \
-            other.display_limit_msg_(#op_symb);                                       \
-        }                                                                             \
-    }                                                                                 \
-                                                                                      \
-    DemoInt this_copy(this->value_ op_symb other.value_);                             \
-                                                                                      \
-    std::string add_to_history = "= '" + name_                                        \
-                                       + "'("                                         \
-                                       + std::to_string(value_)                       \
-                                       + ") + '"                                      \
-                                       + other.name_                                  \
-                                       + "'("                                         \
-                                       + std::to_string(other.value_)                 \
-                                       + ") (res "                                    \
-                                       + std::to_string(this_copy.value_)             \
-                                       + "); ";                                       \
-    this_copy.history_ += add_to_history;                                             \
-                                                                                      \
-    OpNode cur_op_node = GRAPH_DRAWER_SINGLETON.create_op_node(#op_symb, "blue");     \
-    GRAPH_DRAWER_SINGLETON.create_edge(*this, cur_op_node, "blue", "left", "black");  \
-    GRAPH_DRAWER_SINGLETON.create_edge(other, cur_op_node, "blue", "right", "black"); \
-    GRAPH_DRAWER_SINGLETON.create_var_node(this_copy, "red");                         \
-    GRAPH_DRAWER_SINGLETON.create_edge(cur_op_node, this_copy, "blue", "", "blue");   \
-                                                                                      \
-    GRAPH_DRAWER_SINGLETON.exit_cluster();                                            \
-                                                                                      \
-    return this_copy;                                                                 \
+#define BINARY_OP_DEMOINT(op_symb)                                                              \
+DemoInt DemoInt::operator op_symb(const DemoInt &other)                                         \
+{                                                                                               \
+    GRAPH_DRAWER_SINGLETON.enter_cluster(LOCATION);                                             \
+                                                                                                \
+    if ((uses_left_ > 0) && (other.uses_left_ > 0))                                             \
+    {                                                                                           \
+        --uses_left_;                                                                           \
+        --other.uses_left_;                                                                     \
+    }                                                                                           \
+    else                                                                                        \
+    {                                                                                           \
+        if (uses_left_ <= 0)                                                                    \
+        {                                                                                       \
+                                                                                                \
+            display_limit_msg_(#op_symb);                                                       \
+        }                                                                                       \
+        else                                                                                    \
+        {                                                                                       \
+            other.display_limit_msg_(#op_symb);                                                 \
+        }                                                                                       \
+    }                                                                                           \
+                                                                                                \
+    DemoInt result(this->value_ op_symb other.value_);                                          \
+                                                                                                \
+    std::string add_to_history = "= '" + name_                                                  \
+                                       + "'("                                                   \
+                                       + std::to_string(value_)                                 \
+                                       + ") + '"                                                \
+                                       + other.name_                                            \
+                                       + "'("                                                   \
+                                       + std::to_string(other.value_)                           \
+                                       + ") (res "                                              \
+                                       + std::to_string(result.value_)                          \
+                                       + "); ";                                                 \
+    result.history_ += add_to_history;                                                          \
+                                                                                                \
+    OpNode cur_op_node = GRAPH_DRAWER_SINGLETON.create_op_node(#op_symb, OP_NODE_COLOR,         \
+                                                                         OP_NODE_FILL_COLOR);   \
+    GRAPH_DRAWER_SINGLETON.create_edge(*this, cur_op_node, DEFAULT_EDGE_COLOR,                  \
+                                                           "left op",                           \
+                                                           DEFAULT_EDGE_LABEL_COLOR);           \
+    GRAPH_DRAWER_SINGLETON.create_edge(other, cur_op_node, DEFAULT_EDGE_COLOR,                  \
+                                                           "right op",                          \
+                                                           DEFAULT_EDGE_LABEL_COLOR);           \
+    GRAPH_DRAWER_SINGLETON.create_var_node(result, TEMP_VARIABLE_NODE_COLOR,                    \
+                                                   TEMP_VARIABLE_NODE_FILL_COLOR);              \
+    GRAPH_DRAWER_SINGLETON.create_edge(cur_op_node, result, DEFAULT_EDGE_LABEL_COLOR,           \
+                                                            "",                                 \
+                                                            DEFAULT_EDGE_LABEL_COLOR);          \
+                                                                                                \
+    GRAPH_DRAWER_SINGLETON.exit_cluster();                                                      \
+                                                                                                \
+    return result;                                                                              \
 }
 
 BINARY_OP_DEMOINT(+)
@@ -495,338 +481,36 @@ BINARY_OP_DEMOINT(<<)
 BINARY_OP_DEMOINT(>>)
 
 
-bool DemoInt::operator <(DemoInt &other)
-{
-#ifdef DEMO_INT_LIMIT
-    if (uses_left_ <= 0)
-    {
-        std::string func_name = __FUNCTION__;
-        display_limit_msg_(cut_operator_word(&func_name));
-
-        return false;
-    }
-    if (other.uses_left_ <= 0)
-    {
-        std::string func_name = __FUNCTION__;
-        other.display_limit_msg_(cut_operator_word(&func_name));
-
-        return false;
-    }
-    else
-    {
-        --uses_left_;
-        --other.uses_left_;
-    }
-#endif
-
-    return value_ < other.value_;
+#define BOOL_OP_DEMOINT(op_symb)                    \
+bool DemoInt::operator op_symb(DemoInt &other)      \
+{                                                   \
+    if (uses_left_ <= 0)                            \
+    {                                               \
+        display_limit_msg_(#op_symb);               \
+                                                    \
+        return false;                               \
+    }                                               \
+    if (other.uses_left_ <= 0)                      \
+    {                                               \
+        other.display_limit_msg_(#op_symb);         \
+                                                    \
+        return false;                               \
+    }                                               \
+    else                                            \
+    {                                               \
+        --uses_left_;                               \
+        --other.uses_left_;                         \
+    }                                               \
+                                                    \
+    return value_ op_symb other.value_;             \
 }
 
-bool DemoInt::operator >(DemoInt &other)
-{
-#ifdef DEMO_INT_LIMIT
-    if (uses_left_ <= 0)
-    {
-        std::string func_name = __FUNCTION__;
-        display_limit_msg_(cut_operator_word(&func_name));
-
-        return false;
-    }
-    if (other.uses_left_ <= 0)
-    {
-        std::string func_name = __FUNCTION__;
-        other.display_limit_msg_(cut_operator_word(&func_name));
-
-        return false;
-    }
-    else
-    {
-        --uses_left_;
-        --other.uses_left_;
-    }
-#endif
-
-    return value_ > other.value_;
-}
-
-bool DemoInt::operator ==(DemoInt &other)
-{
-#ifdef DEMO_INT_LIMIT
-    if (uses_left_ <= 0)
-    {
-        std::string func_name = __FUNCTION__;
-        display_limit_msg_(cut_operator_word(&func_name));
-
-        return false;
-    }
-    if (other.uses_left_ <= 0)
-    {
-        std::string func_name = __FUNCTION__;
-        other.display_limit_msg_(cut_operator_word(&func_name));
-
-        return false;
-    }
-    else
-    {
-        --uses_left_;
-        --other.uses_left_;
-    }
-#endif
-
-    return value_ == other.value_;
-}
-
-bool DemoInt::operator !=(DemoInt &other)
-{
-#ifdef DEMO_INT_LIMIT
-    if (uses_left_ <= 0)
-    {
-        std::string func_name = __FUNCTION__;
-        display_limit_msg_(cut_operator_word(&func_name));
-
-        return false;
-    }
-    if (other.uses_left_ <= 0)
-    {
-        std::string func_name = __FUNCTION__;
-        other.display_limit_msg_(cut_operator_word(&func_name));
-
-        return false;
-    }
-    else
-    {
-        --uses_left_;
-        --other.uses_left_;
-    }
-#endif
-
-    return value_ != other.value_;
-}
-
-bool DemoInt::operator <=(DemoInt &other)
-{
-#ifdef DEMO_INT_LIMIT
-    if (uses_left_ <= 0)
-    {
-        std::string func_name = __FUNCTION__;
-        display_limit_msg_(cut_operator_word(&func_name));
-
-        return false;
-    }
-    if (other.uses_left_ <= 0)
-    {
-        std::string func_name = __FUNCTION__;
-        other.display_limit_msg_(cut_operator_word(&func_name));
-
-        return false;
-    }
-    else
-    {
-        --uses_left_;
-        --other.uses_left_;
-    }
-#endif
-
-    return value_ <= other.value_;
-}
-
-bool DemoInt::operator >=(DemoInt &other)
-{
-#ifdef DEMO_INT_LIMIT
-    if (uses_left_ <= 0)
-    {
-        std::string func_name = __FUNCTION__;
-        display_limit_msg_(cut_operator_word(&func_name));
-
-        return false;
-    }
-    if (other.uses_left_ <= 0)
-    {
-        std::string func_name = __FUNCTION__;
-        other.display_limit_msg_(cut_operator_word(&func_name));
-
-        return false;
-    }
-    else
-    {
-        --uses_left_;
-        --other.uses_left_;
-    }
-#endif
-
-    return value_ >= other.value_;
-}
-
-
-// #define UNARY_OP_INT(op_symb)                       \
-// DemoInt &DemoInt::operator =(const int other)       \
-// {                                                   \
-//     DEMO_INT_CTOR(converted_int, other);            \
-//     return operator op_symb(converted_int);         \
-// }
-
-
-// DemoInt &DemoInt::operator =(const int other)
-// {
-//     DEMO_INT_CTOR(converted_int, other);
-//     return operator =(converted_int);
-// }
-
-// DemoInt &DemoInt::operator +=(const int other)
-// {
-//     DEMO_INT_CTOR(converted_int, other);
-//     return operator +=(converted_int);
-// }
-
-// DemoInt &DemoInt::operator -=(const int other)
-// {
-//     DEMO_INT_CTOR(converted_int, other);
-//     return operator -=(converted_int);
-// }
-
-// DemoInt &DemoInt::operator *=(const int other)
-// {
-//     DEMO_INT_CTOR(converted_int, other);
-//     return operator *=(converted_int);
-// }
-
-// DemoInt &DemoInt::operator /=(const int other)
-// {
-//     DEMO_INT_CTOR(converted_int, other);
-//     return operator /=(converted_int);
-// }
-
-// DemoInt &DemoInt::operator %=(const int other)
-// {
-//     DEMO_INT_CTOR(converted_int, other);
-//     return operator %=(converted_int);
-// }
-
-// DemoInt &DemoInt::operator ^=(const int other)
-// {
-//     DEMO_INT_CTOR(converted_int, other);
-//     return operator ^=(converted_int);
-// }
-
-// DemoInt &DemoInt::operator &=(const int other)
-// {
-//     DEMO_INT_CTOR(converted_int, other);
-//     return operator &=(converted_int);
-// }
-
-// DemoInt &DemoInt::operator |=(const int other)
-// {
-//     DEMO_INT_CTOR(converted_int, other);
-//     return operator |=(converted_int);
-// }
-
-// DemoInt &DemoInt::operator <<=(const int other)
-// {
-//     DEMO_INT_CTOR(converted_int, other);
-//     return operator <<=(converted_int);
-// }
-
-// DemoInt &DemoInt::operator >>=(const int other)
-// {
-//     DEMO_INT_CTOR(converted_int, other);
-//     return operator >>=(converted_int);
-// }
-
-// DemoInt DemoInt::operator +(const int other)
-// {
-//     DEMO_INT_CTOR(converted_int, other);
-//     return operator +(converted_int);
-// }
-
-// DemoInt DemoInt::operator -(const int other)
-// {
-//     DEMO_INT_CTOR(converted_int, other);
-//     return operator -(converted_int);
-// }
-
-// DemoInt DemoInt::operator *(const int other)
-// {
-//     DEMO_INT_CTOR(converted_int, other);
-//     return operator *(converted_int);
-// }
-
-// DemoInt DemoInt::operator /(const int other)
-// {
-//     DEMO_INT_CTOR(converted_int, other);
-//     return operator /(converted_int);
-// }
-
-// DemoInt DemoInt::operator %(const int other)
-// {
-//     DEMO_INT_CTOR(converted_int, other);
-//     return operator %(converted_int);
-// }
-
-// DemoInt DemoInt::operator ^(const int other)
-// {
-//     DEMO_INT_CTOR(converted_int, other);
-//     return operator ^(converted_int);
-// }
-
-// DemoInt DemoInt::operator &(const int other)
-// {
-//     DEMO_INT_CTOR(converted_int, other);
-//     return operator &(converted_int);
-// }
-
-// DemoInt DemoInt::operator |(const int other)
-// {
-//     DEMO_INT_CTOR(converted_int, other);
-//     return operator |(converted_int);
-// }
-
-// DemoInt DemoInt::operator <<(const int other)
-// {
-//     DEMO_INT_CTOR(converted_int, other);
-//     return operator <<(converted_int);
-// }
-
-// DemoInt DemoInt::operator >>(const int other)
-// {
-//     DEMO_INT_CTOR(converted_int, other);
-//     return operator >>(converted_int);
-// }
-
-// bool DemoInt::operator < (const int other)
-// {
-//     DEMO_INT_CTOR(converted_int, other);
-//     return operator < (converted_int);
-// }
-
-// bool DemoInt::operator > (const int other)
-// {
-//     DEMO_INT_CTOR(converted_int, other);
-//     return operator > (converted_int);
-// }
-
-// bool DemoInt::operator ==(const int other)
-// {
-//     DEMO_INT_CTOR(converted_int, other);
-//     return operator ==(converted_int);
-// }
-
-// bool DemoInt::operator !=(const int other)
-// {
-//     DEMO_INT_CTOR(converted_int, other);
-//     return operator !=(converted_int);
-// }
-
-// bool DemoInt::operator <=(const int other)
-// {
-//     DEMO_INT_CTOR(converted_int, other);
-//     return operator <=(converted_int);
-// }
-
-// bool DemoInt::operator >=(const int other)
-// {
-//     DEMO_INT_CTOR(converted_int, other);
-//     return operator >=(converted_int);
-// }
+BOOL_OP_DEMOINT(<)
+BOOL_OP_DEMOINT(>)
+BOOL_OP_DEMOINT(==)
+BOOL_OP_DEMOINT(!=)
+BOOL_OP_DEMOINT(<=)
+BOOL_OP_DEMOINT(>=)
 
 
 void DemoInt::display_limit_msg_(const char *op_symb_str) const
@@ -839,9 +523,8 @@ void DemoInt::display_limit_msg_(const char *op_symb_str) const
 }
 
 
-void swap(DemoInt &v1, DemoInt &v2)
+void swap(DemoInt &v1, DemoInt &v2)                                                 // why & ? && is much better!
 {
-#ifdef DEMO_INT_LIMIT
     if (v1.uses_left_ <= 0)
     {
         v1.display_limit_msg_(__FUNCTION__);
@@ -859,21 +542,15 @@ void swap(DemoInt &v1, DemoInt &v2)
         --v1.uses_left_;
         --v2.uses_left_;
     }
-#endif
-#ifdef DEMO_INT_HISTORY
-    std::string add_to_history_v1 = "Was swapped with \"" + v2.name_ + 
-                                    "\"(" + std::to_string(v2.value_) + "); ";
-    std::string add_to_history_v2 = "Was swapped with \"" + v1.name_ +
-                                    "\"(" + std::to_string(v1.value_) + "); ";
+
+    std::string add_to_history_v1 = "Was swapped with '" + v2.name_ + 
+                                    "'(" + std::to_string(v2.value_) + "); ";
+    std::string add_to_history_v2 = "Was swapped with '" + v1.name_ +
+                                    "'(" + std::to_string(v1.value_) + "); ";
     v1.history_ += add_to_history_v1;
     v2.history_ += add_to_history_v2;
-#ifdef DEMO_INT_LOGS
-    v1.logs_stream_ << "\"" << v1.name_ << "\"(" << v1.value_ << ") was swapped with \"" <<
-    v2.name_ << "\"(" << v2.value_ << ")" << std::endl; 
-#endif
-#endif
 
-    int t     = v1.value_;
-    v1.value_ = v2.value_;
-    v2.value_ = t;
+    DemoInt temp = v1;
+    v1           = v2;
+    v2           = temp;
 }
