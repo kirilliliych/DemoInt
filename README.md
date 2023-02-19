@@ -34,6 +34,9 @@ but such actions demand more resources such as memory and time to be completed. 
 slow and expensive, but reliable solution. In the case of array described above the copy will receive its
 own array with cloned data, so problems connected with ownership just do not appear.
 
+#### Here is the illustration:
+![ALT](pictures/shallow_and_deep_copy.png)
+
 ***
 ## Constructors and assignment operators
 Since there are copy and move constructors now there are four ways to use one of the whole bunch of their variations:
@@ -51,33 +54,34 @@ Situation is quite similar with assignment operators.
 
 ***
 ## Investigation
-Only 2) and 3) points will be used; other two are used seldom or not used at all.
-The program is in `main.cpp` and is quite simple. It creates two variables, sums them and puts
-the result to the third variable; then it gets divided by the first variable and
-result is put to the fourth variable. Our goal is to decrease the number of copy operations
-by changing them to move operations as we consider that each copy operation takes
-__significantly__ more time than move operation does. It should be mentioned that the program
-was compiled with `-fno-elide-constructors` flag to prevent automatic optimizations.
+Only 2) and 3) points from the previous list will be investigated; other two are used seldom or not used at all.
+The program is in `main.cpp` and is quite simple. It creates two variables, sums them and puts the result to
+the third variable; then it gets divided by the first variable and result is put to the fourth variable. 
+Our goal is to decrease the number of copy operations by changing them to move operations as we consider that 
+each copy operation takes __significantly__ more time comparing with move operation and just is too long. 
+It should be mentioned that the program was compiled with `-fno-elide-constructors` 
+flag to prevent automatic optimizations (except the last stage).
 
-### Only const copy constructor
-Move constructors are disabled in this case, so the whole situation is quite disappointing.
-Quantity of copy constuctor calls and plenty of temporary variables tell us program is 
+### Stage 1: program allows copying `DemoInt` variables but not moving them, `-fno-elide-constructors` is disabled
+As it is mentioned in the header, there is no move semantics in this case, so the situation is 
+quite disappointing: graph is full of unnecessary temporary variables and copy constructor calls.
+tell us program is 
 really slow and uneffective (__six__ copy operations and __four__ temporary variables!): 
 ![ALT](pictures/only_copy_ctor.png)
 
-### Copy and move constructors
+### Stage 2: program allows copying and moving `DemoInt` variables, `-fno-elide-constructors` is disabled
 Now move constructors are enabled, and therefore the whole picture looks better. However,
 we still have __two__ copy operations and __four__ temporary variables (but now there are __four__ moves):
 ![ALT](pictures/copy_and_move_ctors.png)
 
-### Slight optimization made by hands
+### Stage 3: replacement of some inefficient code noticed
 Soon after move constructors were enabled, a little inefficiency was noticed in the code 
 inside BINARY_OP_DEMOINT define.
 `DemoInt this_copy = *this; this_copy op_symb other` was changed to 'DemoInt this_copy(this->value_ op_symb other.value_)'.
 The result is __zero__ copies, __four__ moves, but still __four__ temporary variables:
 ![ALT](pictures/explicit_copy_removed.png)
 
-### Compiler's copy elision
+### Stage 4: compiler's copy elision
 Now we allow compiler to optimize our program. This gives us a significant boost in efficiency,
 because we omit __two__ temporary variables, leaving __two__ more and __two__ move operations:
 ![ALT](pictures/copy_elision.png)
