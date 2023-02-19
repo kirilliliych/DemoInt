@@ -79,7 +79,7 @@ The result is __zero__ copies, __four__ moves, but still __four__ temporary vari
 
 ### Compiler's copy elision
 Now we allow compiler to optimize our program. This gives us a significant boost in efficiency,
-because we omit two temporary variables, leaving __two__ more and __two__ move operations:
+because we omit __two__ temporary variables, leaving __two__ more and __two__ move operations:
 ![ALT](pictures/copy_elision.png)
 
 ## Conclusion
