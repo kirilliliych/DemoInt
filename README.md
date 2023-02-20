@@ -76,8 +76,8 @@ we still have __two__ copy operations and __four__ temporary variables (but now 
 
 ### Stage 3: replacement of some inefficient code noticed
 Soon after move constructors were enabled, a little inefficiency was noticed in the code 
-inside BINARY_OP_DEMOINT define.
-`DemoInt this_copy = *this; this_copy op_symb other` was changed to 'DemoInt this_copy(this->value_ op_symb other.value_)'.
+inside `BINARY_OP_DEMOINT` define.
+`DemoInt this_copy = *this; this_copy op_symb##= other;` was changed to `DemoInt this_copy(this->value_ op_symb other.value_)`.
 The result is __zero__ copies, __four__ moves, but still __four__ temporary variables:
 ![ALT](pictures/explicit_copy_removed.png)
 
