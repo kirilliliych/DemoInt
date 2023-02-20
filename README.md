@@ -63,7 +63,7 @@ This obliges us to do deep copying, so this type of move constructor does not do
 | T(T &)        |        Non-safe                 |                          Slow                            | Too dangerous; used rarely, almost never   |
 | T(const T &)  |          Safe                   |                          Slow                            | Does not corrupt the argument, widely used |
 | T(T &&)       | Non-safe (but that is assumed!) |                          Fast                            | Allows rapidly "stealing" data from expiring object, widely used |
-| T(const T &&) | Safe (but that is absurd!) |                     Fast                            | Saves argument from corruption, but that is nonsense since we cannot extract the data from it rapidly, it forces us to copy and 
+| T(const T &&) | Safe (but that is an absurd!) |                     Fast                            | Saves argument from corruption, but that is nonsense since we cannot extract the data from it rapidly, it forces us to copy and 
 
 Situation is quite similar with assignment operators.
 
