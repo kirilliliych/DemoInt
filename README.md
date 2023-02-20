@@ -1,5 +1,4 @@
 # DemoInt (Tracked copy/move semantics)
-
 This repository is devoted to the topic of copy/move semantics.
 
 ***
@@ -55,6 +54,14 @@ troubles: e.g. `free` of some allocated memory in given object's destructor can 
 the pointer to this memory was not assigned to `nullptr` timely.
 4) `T(const T &&)` -- *const move constructor*; as the transmitted object is const, we cannot change it.
 This obliges us to do deep copying, so this type of move constructor does not do what he is destined to.
+
+### Small summary
+|               | Safety (of an argument)         | Rapidity (slow if requires copying, fast if does moving) |    Expediency (in a production code)       |
+| :------------ | :-----------------------------: | :------------------------------------------------------: | :----------------------------------------: |
+| T(T &)        |        Non-safe                 |                          Slow                            | Too dangerous; used rarely, almost never   |
+| T(const T &)  |          Safe                   |                          Slow                            | Does not corrupt the argument, widely used |
+| T(T &&)       | Non-safe (but that is assumed!) |                          Fast                            | Allows "stealing" data, widely used        |
+| T(const T &&) |
 
 Situation is quite similar with assignment operators.
 
