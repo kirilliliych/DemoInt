@@ -20,6 +20,9 @@ class GraphDrawer;
 #define DEMO_INT_COPY_CTOR(var_name, var_to_copy_name) DemoInt var_name(var_to_copy_name)
 
 
+const char *cut_operator_word(std::string *str);
+
+
 class DemoInt
 {
     friend void swap(DemoInt &v1, DemoInt &v2);
@@ -50,6 +53,7 @@ public:
     std::string get_history() const;
     int get_value() const;
     const void *get_address() const;
+    static size_t get_temp_counter();
 
     operator int() const;
 
@@ -94,53 +98,21 @@ public:
     bool operator <=(DemoInt &other);   
     bool operator >=(DemoInt &other);
 
-
-    // DemoInt &operator  = (const int other);
-
-    // DemoInt &operator += (const int other);
-    // DemoInt &operator -= (const int other);
-    // DemoInt &operator *= (const int other);
-    // DemoInt &operator /= (const int other);
-    // DemoInt &operator %= (const int other);
-    // DemoInt &operator ^= (const int other);
-    // DemoInt &operator &= (const int other);
-    // DemoInt &operator |= (const int other);
-    // DemoInt &operator <<=(const int other);
-    // DemoInt &operator >>=(const int other);
-
-    // DemoInt operator + (const int other);
-    // DemoInt operator - (const int other);
-    // DemoInt operator * (const int other);
-    // DemoInt operator / (const int other);
-    // DemoInt operator % (const int other);
-    // DemoInt operator ^ (const int other);
-    // DemoInt operator & (const int other);
-    // DemoInt operator | (const int other);
-    // DemoInt operator <<(const int other);
-    // DemoInt operator >>(const int other);
-
-    // bool operator < (const int other);
-    // bool operator > (const int other);
-    // bool operator ==(const int other);  
-    // bool operator !=(const int other);
-    // bool operator <=(const int other);
-    // bool operator >=(const int other);
-
 private:
 
     void display_limit_msg_(const char *op_symb_str) const;
 //------------------------Variables----------------------------
-    std::string name_           = "";
-    mutable size_t uses_left_   = 0;
-
-    std::ostream &logs_stream_  = std::cout;
-    std::string history_        = "";
-
     static size_t temp_counter_;
 
-    int value_                  = 0;
+    std::string name_;
+    mutable size_t uses_left_;
+
+    std::ostream &logs_stream_;
+    std::string history_;
+
+    int value_;
 };
 
-void swap(DemoInt &v1, DemoInt &v2);                                    // non-const reference seems to fit nice here...
+void swap(DemoInt &v1, DemoInt &v2);
 
 #endif
