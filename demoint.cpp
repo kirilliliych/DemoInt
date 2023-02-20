@@ -29,19 +29,19 @@ DemoInt::DemoInt(const int value, const std::string &name, std::ostream &logs_st
     history_(""),
     value_(value)
 {
-    GRAPH_DRAWER_SINGLETON.enter_cluster(LOCATION);
+    GraphDrawer::GRAPH_DRAWER_SINGLETON->enter_cluster(LOCATION);
 
     if (name_ == "")
     {
         name_ += "temp" + std::to_string(temp_counter_);
         ++temp_counter_;
 
-        GRAPH_DRAWER_SINGLETON.create_var_node(*this, TEMP_VARIABLE_NODE_COLOR,
+        GraphDrawer::GRAPH_DRAWER_SINGLETON->create_var_node(*this, TEMP_VARIABLE_NODE_COLOR,
                                                       TEMP_VARIABLE_NODE_FILL_COLOR);
     }
     else
     {
-        GRAPH_DRAWER_SINGLETON.create_var_node(*this, EXPLICIT_VARIABLE_COLOR,
+        GraphDrawer::GRAPH_DRAWER_SINGLETON->create_var_node(*this, EXPLICIT_VARIABLE_COLOR,
                                                       EXPLICIT_VARIABLE_FILL_COLOR);
     }
 
@@ -51,7 +51,7 @@ DemoInt::DemoInt(const int value, const std::string &name, std::ostream &logs_st
                                  std::to_string(location.line()) + "; ";
     history_ += add_to_history;
 
-    GRAPH_DRAWER_SINGLETON.exit_cluster();
+    GraphDrawer::GRAPH_DRAWER_SINGLETON->exit_cluster();
 }
 
 #ifdef COPY_CTOR
@@ -62,7 +62,7 @@ DemoInt::DemoInt(const DemoInt &other, const std::string &name, std::ostream &lo
     uses_left_(MAX_DEMO_VERSION_OPERATIONS_LIMIT),
     logs_stream_(logs_stream)
 {
-    GRAPH_DRAWER_SINGLETON.enter_cluster(LOCATION);
+    GraphDrawer::GRAPH_DRAWER_SINGLETON->enter_cluster(LOCATION);
     
     if (other.uses_left_ <= 0)
     {
@@ -81,16 +81,16 @@ DemoInt::DemoInt(const DemoInt &other, const std::string &name, std::ostream &lo
         name_ += "temp" + std::to_string(temp_counter_);
         ++temp_counter_;
 
-        GRAPH_DRAWER_SINGLETON.create_var_node(*this, TEMP_VARIABLE_NODE_COLOR,
+        GraphDrawer::GRAPH_DRAWER_SINGLETON->create_var_node(*this, TEMP_VARIABLE_NODE_COLOR,
                                                       TEMP_VARIABLE_NODE_FILL_COLOR);
     }
     else
     {
-        GRAPH_DRAWER_SINGLETON.create_var_node(*this, EXPLICIT_VARIABLE_COLOR,
+        GraphDrawer::GRAPH_DRAWER_SINGLETON->create_var_node(*this, EXPLICIT_VARIABLE_COLOR,
                                                       EXPLICIT_VARIABLE_FILL_COLOR);
     }
 
-    GRAPH_DRAWER_SINGLETON.create_edge(other, *this, COPY_EDGE_COLOR, "COPY COPY OMG!!111", COPY_EDGE_LABEL_COLOR);
+    GraphDrawer::GRAPH_DRAWER_SINGLETON->create_edge(other, *this, COPY_EDGE_COLOR, "COPY COPY OMG!!111", COPY_EDGE_LABEL_COLOR);
     
     std::string add_to_history = "DemoInt '" + name_ + "' was created in FILE " +
                                  location.file_name() + " FUNCTION " + location.function_name() +
@@ -98,12 +98,12 @@ DemoInt::DemoInt(const DemoInt &other, const std::string &name, std::ostream &lo
                                  other.name_ + "' (" + std::to_string(other.value_ ) + "); ";
     history_ += add_to_history;
 
-    GRAPH_DRAWER_SINGLETON.exit_cluster();
+    GraphDrawer::GRAPH_DRAWER_SINGLETON->exit_cluster();
 }
 
 DemoInt &DemoInt::operator =(const DemoInt &other)
 {
-    GRAPH_DRAWER_SINGLETON.enter_cluster(LOCATION);
+    GraphDrawer::GRAPH_DRAWER_SINGLETON->enter_cluster(LOCATION);
 
     if (uses_left_ <= 0)
     {
@@ -127,12 +127,12 @@ DemoInt &DemoInt::operator =(const DemoInt &other)
 
     value_ = other.value_;
     
-    GRAPH_DRAWER_SINGLETON.create_edge(other, *this, COPY_EDGE_COLOR, "COPY ASSIGNMENT!", COPY_EDGE_LABEL_COLOR);
+    GraphDrawer::GRAPH_DRAWER_SINGLETON->create_edge(other, *this, COPY_EDGE_COLOR, "COPY ASSIGNMENT!", COPY_EDGE_LABEL_COLOR);
 
     std::string add_to_history = "= '" + other.name_ + "'(" + std::to_string(other.value_) + "); ";
     history_ += add_to_history;
 
-    GRAPH_DRAWER_SINGLETON.exit_cluster();
+    GraphDrawer::GRAPH_DRAWER_SINGLETON->exit_cluster();
 
     return *this;
 }
@@ -146,22 +146,22 @@ DemoInt::DemoInt(DemoInt &&other, const std::string &name, std::ostream &logs_st
     uses_left_(MAX_DEMO_VERSION_OPERATIONS_LIMIT),
     logs_stream_(logs_stream)
 {
-    GRAPH_DRAWER_SINGLETON.enter_cluster(LOCATION);
+    GraphDrawer::GRAPH_DRAWER_SINGLETON->enter_cluster(LOCATION);
 
     if (name_ == "")
     {
         name_ += "temp" + std::to_string(temp_counter_);
         ++temp_counter_;
 
-        GRAPH_DRAWER_SINGLETON.create_var_node(*this, TEMP_VARIABLE_NODE_COLOR,
+        GraphDrawer::GRAPH_DRAWER_SINGLETON->create_var_node(*this, TEMP_VARIABLE_NODE_COLOR,
                                                       TEMP_VARIABLE_NODE_FILL_COLOR);
     }
     else
     {
-        GRAPH_DRAWER_SINGLETON.create_var_node(*this, EXPLICIT_VARIABLE_COLOR,
+        GraphDrawer::GRAPH_DRAWER_SINGLETON->create_var_node(*this, EXPLICIT_VARIABLE_COLOR,
                                                       EXPLICIT_VARIABLE_FILL_COLOR);
     }
-    GRAPH_DRAWER_SINGLETON.create_edge(other, *this, MOVE_EDGE_COLOR, "MOVE ^_^", MOVE_EDGE_LABEL_COLOR);
+    GraphDrawer::GRAPH_DRAWER_SINGLETON->create_edge(other, *this, MOVE_EDGE_COLOR, "MOVE ^_^", MOVE_EDGE_LABEL_COLOR);
     
     std::string add_to_history = "DemoInt '" + name_ + "' was created in FILE " +
                                  location.file_name() + " FUNCTION " + location.function_name() +
@@ -169,12 +169,12 @@ DemoInt::DemoInt(DemoInt &&other, const std::string &name, std::ostream &logs_st
                                  other.name_ + "' (" + std::to_string(other.value_ ) + "); ";
     history_ += add_to_history;
 
-    GRAPH_DRAWER_SINGLETON.exit_cluster();
+    GraphDrawer::GRAPH_DRAWER_SINGLETON->exit_cluster();
 }
 
 DemoInt &DemoInt::operator =(DemoInt &&other)
 {
-    GRAPH_DRAWER_SINGLETON.enter_cluster(LOCATION);
+    GraphDrawer::GRAPH_DRAWER_SINGLETON->enter_cluster(LOCATION);
 
     if (uses_left_ <= 0)
     {
@@ -190,12 +190,12 @@ DemoInt &DemoInt::operator =(DemoInt &&other)
 
     value_ = other.value_;
     
-    GRAPH_DRAWER_SINGLETON.create_edge(other, *this, MOVE_EDGE_COLOR, "MOVE ASSIGNMENT ^_^", MOVE_EDGE_LABEL_COLOR);
+    GraphDrawer::GRAPH_DRAWER_SINGLETON->create_edge(other, *this, MOVE_EDGE_COLOR, "MOVE ASSIGNMENT ^_^", MOVE_EDGE_LABEL_COLOR);
 
     std::string add_to_history = "= '" + other.name_ + "'(" + std::to_string(other.value_) + "); ";
     history_ += add_to_history;
 
-    GRAPH_DRAWER_SINGLETON.exit_cluster();
+    GraphDrawer::GRAPH_DRAWER_SINGLETON->exit_cluster();
 
     return *this;
 }
@@ -235,7 +235,7 @@ DemoInt::operator int() const
 #define UNARY_OP_DEMOINT(op_symb)                                        \
 DemoInt &DemoInt::operator op_symb(const DemoInt &other)                 \
 {                                                                        \
-    GRAPH_DRAWER_SINGLETON.enter_cluster(LOCATION);                      \
+    GraphDrawer::GRAPH_DRAWER_SINGLETON->enter_cluster(LOCATION);                      \
                                                                          \
     if ((uses_left_ > 0) && (other.uses_left_ > 0))                      \
     {                                                                    \
@@ -272,7 +272,7 @@ DemoInt &DemoInt::operator op_symb(const DemoInt &other)                 \
                                     + "); ";                             \
     history_ += add_to_history;                                          \
                                                                          \
-    GRAPH_DRAWER_SINGLETON.exit_cluster();                               \
+    GraphDrawer::GRAPH_DRAWER_SINGLETON->exit_cluster();                               \
                                                                          \
     return *this;                                                        \
 }
@@ -384,7 +384,7 @@ DemoInt DemoInt::operator --(int)
 #define UNARY_OP_NO_ARG_DEMOINT(op_symb)                                \
 DemoInt DemoInt::operator op_symb()                                     \
 {                                                                       \
-    GRAPH_DRAWER_SINGLETON.enter_cluster(LOCATION);                     \
+    GraphDrawer::GRAPH_DRAWER_SINGLETON->enter_cluster(LOCATION);                     \
                                                                         \
     if (uses_left_ <= 0)                                                \
     {                                                                   \
@@ -402,7 +402,7 @@ DemoInt DemoInt::operator op_symb()                                     \
                                 + "); ";                                \
     this_copy.history_ += add_to_history;                               \
                                                                         \
-    GRAPH_DRAWER_SINGLETON.exit_cluster();                              \
+    GraphDrawer::GRAPH_DRAWER_SINGLETON->exit_cluster();                              \
                                                                         \
     return this_copy;                                                   \
 }
@@ -416,7 +416,7 @@ UNARY_OP_NO_ARG_DEMOINT(-)
 #define BINARY_OP_DEMOINT(op_symb)                                                              \
 DemoInt DemoInt::operator op_symb(const DemoInt &other)                                         \
 {                                                                                               \
-    GRAPH_DRAWER_SINGLETON.enter_cluster(LOCATION);                                             \
+    GraphDrawer::GRAPH_DRAWER_SINGLETON->enter_cluster(LOCATION);                                             \
                                                                                                 \
     if ((uses_left_ > 0) && (other.uses_left_ > 0))                                             \
     {                                                                                           \
@@ -450,21 +450,21 @@ DemoInt DemoInt::operator op_symb(const DemoInt &other)                         
                                        + "); ";                                                 \
     result.history_ += add_to_history;                                                          \
                                                                                                 \
-    OpNode cur_op_node = GRAPH_DRAWER_SINGLETON.create_op_node(#op_symb, OP_NODE_COLOR,         \
+    OpNode cur_op_node = GraphDrawer::GRAPH_DRAWER_SINGLETON->create_op_node(#op_symb, OP_NODE_COLOR,         \
                                                                          OP_NODE_FILL_COLOR);   \
-    GRAPH_DRAWER_SINGLETON.create_edge(*this, cur_op_node, DEFAULT_EDGE_COLOR,                  \
+    GraphDrawer::GRAPH_DRAWER_SINGLETON->create_edge(*this, cur_op_node, DEFAULT_EDGE_COLOR,                  \
                                                            "left op",                           \
                                                            DEFAULT_EDGE_LABEL_COLOR);           \
-    GRAPH_DRAWER_SINGLETON.create_edge(other, cur_op_node, DEFAULT_EDGE_COLOR,                  \
+    GraphDrawer::GRAPH_DRAWER_SINGLETON->create_edge(other, cur_op_node, DEFAULT_EDGE_COLOR,                  \
                                                            "right op",                          \
                                                            DEFAULT_EDGE_LABEL_COLOR);           \
-    GRAPH_DRAWER_SINGLETON.create_var_node(result, TEMP_VARIABLE_NODE_COLOR,                    \
+    GraphDrawer::GRAPH_DRAWER_SINGLETON->create_var_node(result, TEMP_VARIABLE_NODE_COLOR,                    \
                                                    TEMP_VARIABLE_NODE_FILL_COLOR);              \
-    GRAPH_DRAWER_SINGLETON.create_edge(cur_op_node, result, DEFAULT_EDGE_LABEL_COLOR,           \
+    GraphDrawer::GRAPH_DRAWER_SINGLETON->create_edge(cur_op_node, result, DEFAULT_EDGE_LABEL_COLOR,           \
                                                             "",                                 \
                                                             DEFAULT_EDGE_LABEL_COLOR);          \
                                                                                                 \
-    GRAPH_DRAWER_SINGLETON.exit_cluster();                                                      \
+    GraphDrawer::GRAPH_DRAWER_SINGLETON->exit_cluster();                                                      \
                                                                                                 \
     return result;                                                                              \
 }

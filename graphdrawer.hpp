@@ -38,7 +38,7 @@ struct OpNode
 class GraphDrawer
 {
 public:
-//----------------------------------------------------
+//---------------------------------------------------------------------------------------
     GraphDrawer(const char *graph_source_file_name  = DEFAULT_GRAPH_SOURCE_FILE_NAME,
                 const char *graph_picture_name      = DEFAULT_GRAPH_PICTURE_FILE_NAME);
 
@@ -46,7 +46,7 @@ public:
     GraphDrawer &operator =(const GraphDrawer &) = delete;
 
     ~GraphDrawer();
-//----------------------------------------------------
+//---------------------------------------------------------------------------------------
     void create_var_node(const DemoInt &var, const char *color, const char *fillcolor) const;
 
     OpNode create_op_node(const char *op_symb_str, const char *color, const char *fillcolor) const;
@@ -63,10 +63,10 @@ public:
     void enter_cluster(Location location) const;
 
     void exit_cluster() const;
-//--------------------Variables-----------------------
-private:
-
+//--------------------Variables----------------------------------------------------------
     static GraphDrawer *GRAPH_DRAWER_SINGLETON;
+
+private:
 
     static size_t op_counter_;
     static size_t cluster_counter_;
