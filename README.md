@@ -32,7 +32,10 @@ This way of copying is used by default by compiler.
 ### Deep copying
 Unlike shallow copying, deep copying clones the whole information. As a result, the copy is "independent",
 but such actions demand more resources such as memory and time to be completed. Briefly speaking, it is 
-slow and expensive, but reliable solution. In the case of array described above the copy will receive its
+slow and expensive, but reliable solution. 
+
+TO SECTION OF SITIUATIONS
+In the case of array described above the copy will receive its
 own array with cloned data, so problems connected with ownership just do not appear.
 
 #### Here is the illustration:
