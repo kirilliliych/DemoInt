@@ -5,14 +5,13 @@ This repository is devoted to the topic of copy/move semantics.
 ## Brief introduction
 C++11 provided us plenty of new things, and in this whole bunch such novelties
 as __rvalue references__ and __move semantics__ can be noticed. Although it may seem
-that these entities are peculiarly similar to lvalue references and copy semantics accordingly,
-they introduce some new ideas in C++.
+that these entities are peculiarly similar to lvalue references and copy semantics
+accordingly, they introduce some new ideas to C++.
 
 ***
 ## Rvalue references
-The main purpose of rvalue references (they are marked like
-*&&* - two ampersands) is to deal with temporary objects 
-(which are to be destroyed soon).
+The main purpose of rvalue references (they are marked like *&&* - two ampersands) 
+is to deal with temporary objects (which are to be destroyed soon).
 
 ***
 ## Copy semantics reminder
@@ -21,7 +20,10 @@ Copying in C++ divides into two types: __shallow copying__ and __deep copying__.
 ### Shallow copying
 Shallow copying is copying the "first level" of data without going further. It means that
 in case of copying, for example, an object of a class only its fields will be cloned, nothing more.
-It is faster, than the second variant, but can lead to the "ownership problem", when there is some 
+Therefore, if 
+
+TO SECTION OF SITUATIONS
+It is faster, than the variant below, but can lead to the "ownership problem", when there is some 
 data belonging to a specific object and after the described action it becomes a trouble to determine 
 its owner. A nice example is a class containing a pointer to an array with data; shallow copying will
 copy only the pointers, not the whole information, so we have natural trouble: who should delete the array?
@@ -50,7 +52,7 @@ to it is const).
 so we often want to change it, "throwing out" unnecessary data and obtaining it from the given object.
 As it is a move constructor, it is a better choice for program rapidity comparing to the copy constructor
 as it does not spend time and resources on copying. However, it "steals" data from its argument which can cause
-troubles: e.g. `free` of some allocated memory in given object's destructor can lead to double free problem if
+troubles: e.g. `free` of some allocated memory in given object's destructor can lead to "double free problem" if
 the pointer to this memory was not assigned to `nullptr` timely.
 4) `T(const T &&)` -- *const move constructor*; as the transmitted object is const, we cannot change it.
 This obliges us to do deep copying, so this type of move constructor does not do what he is destined to.
@@ -60,8 +62,8 @@ This obliges us to do deep copying, so this type of move constructor does not do
 | :------------ | :-----------------------------: | :------------------------------------------------------: | :----------------------------------------: |
 | T(T &)        |        Non-safe                 |                          Slow                            | Too dangerous; used rarely, almost never   |
 | T(const T &)  |          Safe                   |                          Slow                            | Does not corrupt the argument, widely used |
-| T(T &&)       | Non-safe (but that is assumed!) |                          Fast                            | Allows "stealing" data, widely used        |
-| T(const T &&) |
+| T(T &&)       | Non-safe (but that is assumed!) |                          Fast                            | Allows rapidly "stealing" data from expiring object, widely used |
+| T(const T &&) | Safe (but that is absurd!) |                     Fast                            | Saves argument from corruption, but that is nonsense since we cannot extract the data from it rapidly, it forces us to copy and 
 
 Situation is quite similar with assignment operators.
 
