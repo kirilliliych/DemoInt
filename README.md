@@ -80,7 +80,7 @@ Now move constructors are enabled, and therefore the whole picture looks better.
 we still have __two__ copy operations and __four__ temporary variables (but now there are __four__ moves):
 ![ALT](pictures/copy_and_move_ctors.png)
 
-### Stage 3: replacement of some inefficient code noticed
+### Stage 3: replacement of some inefficient code provided
 Soon after move constructors were enabled, a little inefficiency was noticed in the code 
 inside `BINARY_OP_DEMOINT` define.
 `DemoInt this_copy = *this; this_copy op_symb##= other;` was changed to `DemoInt this_copy(this->value_ op_symb other.value_)`.
