@@ -15,5 +15,5 @@ int main()
 
     GraphDrawer::GRAPH_DRAWER_SINGLETON->exit_cluster();
 
-    return 0;       //headers in investigation, repaint pictures...
+    return 0;       //repaint pictures...
 }

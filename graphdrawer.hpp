@@ -10,21 +10,24 @@
 static const char *DEFAULT_GRAPH_SOURCE_FILE_NAME  = "tracked_graph.txt";
 static const char *DEFAULT_GRAPH_PICTURE_FILE_NAME = "tracking_picture.png";
 
+static const char *FUNCTIONS_DARKENING_BACKGROUND   = "#00000030";
+static const char *OP_NODE_COLOR                    = "#340570ff";
+static const char *OP_NODE_FILL_COLOR               = "#9a6ad6ff";
+static const char *EXPLICIT_VARIABLE_FILL_COLOR     = "#34c6cdff";
+static const char *EXPLICIT_VARIABLE_COLOR          = "#006064ff";
+static const char *TEMP_VARIABLE_NODE_COLOR         = "#a62000ff";
+static const char *TEMP_VARIABLE_NODE_FILL_COLOR    = "#fb3f51ff";
 
-static const char *FUNCTIONS_DARKENING_BACKGROUND = "#00000020";
-static const char *OP_NODE_COLOR                  = "#340570ff";
-static const char *OP_NODE_FILL_COLOR             = "#9a6ad6ff";
-static const char *EXPLICIT_VARIABLE_FILL_COLOR   = "#34c6cdff";
-static const char *EXPLICIT_VARIABLE_COLOR        = "#006064ff";
-static const char *TEMP_VARIABLE_NODE_COLOR       = "#a62000ff";
-static const char *TEMP_VARIABLE_NODE_FILL_COLOR  = "#fb3f51ff";
-
-static const char *DEFAULT_EDGE_COLOR             = "#ffaa00ff";
-static const char *DEFAULT_EDGE_LABEL_COLOR       = "#000000ff";
-static const char *COPY_EDGE_COLOR                = "#ff0000ff";
-static const char *COPY_EDGE_LABEL_COLOR          = COPY_EDGE_COLOR;
-static const char *MOVE_EDGE_COLOR                = "#0acf00ff";
-static const char *MOVE_EDGE_LABEL_COLOR          = MOVE_EDGE_COLOR;
+static const char *DEFAULT_EDGE_COLOR               = "#1533adff";
+static const char *DEFAULT_EDGE_LABEL_COLOR         = "#000000ff";
+static const char *COPY_EDGE_COLOR                  = "#ff0000ff";
+static const char *COPY_EDGE_LABEL_COLOR            = COPY_EDGE_COLOR;
+static const char *COPY_ASSIGNMENT_EDGE_COLOR       = "#ff6700ff";
+static const char *COPY_ASSIGNMENT_EDGE_LABEL_COLOR = COPY_ASSIGNMENT_EDGE_COLOR;
+static const char *MOVE_EDGE_COLOR                  = "#0acf00ff";
+static const char *MOVE_EDGE_LABEL_COLOR            = MOVE_EDGE_COLOR;
+static const char *MOVE_ASSIGNMENT_EDGE_COLOR       = "#a2ef00ff";
+static const char *MOVE_ASSIGNMENT_EDGE_LABEL_COLOR = MOVE_ASSIGNMENT_EDGE_COLOR; 
 
 
 class DemoInt;
@@ -63,10 +66,20 @@ public:
     void enter_cluster(Location location) const;
 
     void exit_cluster() const;
+
+    void inc_copy_ctor_counter();
+    void inc_copy_assignment_counter();
+    void inc_move_ctor_counter();
+    void inc_move_assignment_counter();
 //--------------------Variables----------------------------------------------------------
     static GraphDrawer *GRAPH_DRAWER_SINGLETON;
 
 private:
+
+    static size_t copy_ctor_counter_;
+    static size_t copy_assignment_counter_;
+    static size_t move_ctor_counter_;
+    static size_t move_assignment_counter_;
 
     static size_t op_counter_;
     static size_t cluster_counter_;

@@ -3,6 +3,11 @@
 
 GraphDrawer *GraphDrawer::GRAPH_DRAWER_SINGLETON = nullptr;
 
+size_t GraphDrawer::copy_ctor_counter_       = 0;
+size_t GraphDrawer::copy_assignment_counter_ = 0;
+size_t GraphDrawer::move_ctor_counter_       = 0;
+size_t GraphDrawer::move_assignment_counter_ = 0;
+
 size_t GraphDrawer::op_counter_      = 0;
 size_t GraphDrawer::cluster_counter_ = 0;
 
@@ -27,6 +32,26 @@ GraphDrawer::GraphDrawer(const char *graph_source_file_name, const char *graph_p
 
 GraphDrawer::~GraphDrawer()
 {
+    fprintf(graph_source_file_, "subgraph brief_info\n"
+                                "{                  \n"
+                                "rankdir=TB;"
+                                "COPY_CTORS[style=filled, fillcolor=\"%s\", shape=diamond, label=\"COPY_CTORS=%lu\"];\n"
+                                "COPY_ASSIGNMENTS[style=filled, fillcolor=\"%s\", shape=diamond, label=\"COPY_ASSIGNMENTS=%lu\"];\n"
+                                "MOVE_CTORS[style=filled, fillcolor=\"%s\", shape=diamond, label=\"MOVE_CTORS=%lu\"];\n"
+                                "MOVE_ASSIGNMENTS[style=filled, fillcolor=\"%s\", shape=diamond, label=\"MOVE_ASSIGNMENTS=%lu\"];\n"
+                                "TEMP_VARIABLES[style=filled, fillcolor=\"%s\", shape=diamond, label=\"=TEMP_VARIABLES=%lu\"];\n"
+                                "}\n",
+                                COPY_EDGE_COLOR,                   
+                                GraphDrawer::copy_ctor_counter_,
+                                COPY_ASSIGNMENT_EDGE_COLOR,
+                                GraphDrawer::copy_assignment_counter_,
+                                MOVE_EDGE_COLOR,
+                                GraphDrawer::move_ctor_counter_,
+                                MOVE_ASSIGNMENT_EDGE_COLOR,
+                                GraphDrawer::move_assignment_counter_,
+                                TEMP_VARIABLE_NODE_FILL_COLOR,
+                                DemoInt::get_temp_counter());
+
     fprintf(graph_source_file_, "}\n");
 
     fclose(graph_source_file_);
@@ -150,4 +175,25 @@ void GraphDrawer::enter_cluster(Location location) const
 void GraphDrawer::exit_cluster() const
 {
     fprintf(graph_source_file_, "}\n");
+}
+
+
+void GraphDrawer::inc_copy_ctor_counter()
+{
+    ++copy_ctor_counter_;
+}
+
+void GraphDrawer::inc_copy_assignment_counter()
+{
+    ++copy_assignment_counter_;
+}
+
+void GraphDrawer::inc_move_ctor_counter()
+{
+    ++move_ctor_counter_;
+}
+
+void GraphDrawer::inc_move_assignment_counter()
+{
+    ++move_assignment_counter_;
 }
