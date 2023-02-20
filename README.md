@@ -41,7 +41,8 @@ own array with cloned data, so problems connected with ownership just do not app
 ## Constructors and assignment operators
 Since there are copy and move constructors now there are four ways to use one of the whole bunch of their variations:
 1) `T(T &)` -- *non-const copy constructor*; it is slow (does copying contents from argument object to a new object)
-and even dangerous, as it is possible to corrupt the transmitted object because the reference to it is non-const. 
+and even dangerous, as it is possible to corrupt the transmitted object because the reference to it is non-const
+(the author of the readme file assumes it is common to __not__ to change the object being copied from).
 Not a good choice.
 2) `T(const T &)` -- *const copy constructor*; correct form of copy constructor. It is also slow as the
 previous variant (the reasons are the same), but at least cannot change the transmitted object (because the reference
