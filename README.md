@@ -40,15 +40,20 @@ own array with cloned data, so problems connected with ownership just do not app
 ***
 ## Constructors and assignment operators
 Since there are copy and move constructors now there are four ways to use one of the whole bunch of their variations:
-1) `T(T &)` -- *non-const copy constructor*; it is slow and even dangerous, as it is possible to corrupt
-the transmitted object because the reference is non-const. Not a good choice.
+1) `T(T &)` -- *non-const copy constructor*; it is slow (does copying contents from argument object to a new object)
+and even dangerous, as it is possible to corrupt the transmitted object because the reference to it is non-const. 
+Not a good choice.
 2) `T(const T &)` -- *const copy constructor*; correct form of copy constructor. It is also slow as the
-previous variant, but at least cannot change the transmitted object.
+previous variant (the reasons are the same), but at least cannot change the transmitted object (because the reference
+to it is const).
 3) `T(T &&)` -- *non-const move constructor*; correct form of move constructor. Rvalue is temporary object,
-so we often want to change it, "throwing out" unnecessary data. As it is move constructor, it is a
-better choice for speed comparing to the copy constructor.
+so we often want to change it, "throwing out" unnecessary data and obtaining it from the given object.
+As it is a move constructor, it is a better choice for program rapidity comparing to the copy constructor
+as it does not spend time and resources on copying. However, it "steals" data from its argument which can cause
+troubles: e.g. `free` of some allocated memory in given object's destructor can lead to double free problem if
+the pointer to this memory was not assigned to `nullptr` timely.
 4) `T(const T &&)` -- *const move constructor*; as the transmitted object is const, we cannot change it.
-This obliges us to do deep copying, so this type of move constructor loses its sense.
+This obliges us to do deep copying, so this type of move constructor does not do what he is destined to.
 
 Situation is quite similar with assignment operators.
 
