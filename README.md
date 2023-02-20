@@ -54,9 +54,9 @@ Situation is quite similar with assignment operators.
 
 ***
 ## Investigation
-Only 2) and 3) points from the previous list will be investigated; other two are used seldom or not used at all.
-The program is in `main.cpp` and is quite simple. It creates two variables, sums them and puts the result to
-the third variable; then it gets divided by the first variable and result is put to the fourth variable. 
+Only 2) and 3) points from the previous list will be investigated; other two are used seldom or (more likely) 
+not used at all. The program is in `main.cpp` and is quite simple. It creates two variables, sums them and puts 
+the result to the third variable; then it gets divided by the first variable and result is put to the fourth variable. 
 Our goal is to decrease the number of copy operations by changing them to move operations as we consider that 
 each copy operation takes __significantly__ more time comparing with move operation and just is too long. 
 It should be mentioned that the program was compiled with `-fno-elide-constructors` 
