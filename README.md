@@ -3,7 +3,7 @@ This repository is devoted to the topic of copy/move semantics.
 
 ***
 ## Brief introduction
-C++11 provided us plenty of new things, and in this whole bunch such novelties
+C++11 provided us plenty of new things, and in this whole bunch of novelties such examples
 as __rvalue references__ and __move semantics__ can be noticed. Although it may seem
 that these entities are peculiarly similar to lvalue references and copy semantics
 accordingly, they introduce some new ideas to C++.
