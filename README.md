@@ -6,7 +6,7 @@ This repository is devoted to the topic of copy/move semantics.
 C++11 introduced plenty of new things to us, and in this whole bunch of novelties such examples
 as __rvalue references__ and __move semantics__ can be noticed. Although it may seem
 that these entities are peculiarly similar to lvalue references and copy semantics
-accordingly, they introduce some new ideas to C++.
+accordingly, they introduce some new ideas to the language.
 
 ***
 ## Rvalue references
@@ -28,8 +28,8 @@ reference to the old one.
 
 ### Deep copying
 Unlike shallow copying, deep copying clones the whole information, making a new object that is
-fully separated from the previous one. In this case any changes to one of these objects will have
-no effect on the other: both of them are autonomic.
+fully separated from the previous one. In this case any changes to one of these objects will not
+influence the other: both of them are autonomic.
 
 #### Here is the illustration:
 ![ALT](pictures/shallow_and_deep_copy.png) CHANGE PICTURE
@@ -39,8 +39,13 @@ no effect on the other: both of them are autonomic.
 Now it is time to say a couple of words about move semantics.
 
 Move semantics is a new feature introduced in C++11 as an alternative to copy semantics. Obviously,
-it is not supposed to replace the last one; however, it provides an opportunity to compensate
+it is not supposed to replace the last one; however, it provides an opportunity to compensate 
 ineffectiveness of copying in some cases (caused by time and memory resources spent on copying).
+
+Move constructor is a constructor that takes an rvalue reference as an argument. It creates an object
+via the resources of the existing one, but instead of copying it just takes ownership of them. As a result,
+data starts to belong to the new object while the old one is usually left empty. 
+
 
 
 TO SECTION OF DIFFERENCES
@@ -57,20 +62,20 @@ own array with cloned data, so problems connected with ownership just do not app
 ***
 ## Constructors and assignment operators
 Below syntactic expressions 
-1) `T(T &)` -- *non-const copy constructor*; it is slow (does copying contents from argument object to a new object)
-and even dangerous, as it is possible to corrupt the transmitted object because the reference to it is non-const
-(the author of the readme file assumes it is common to __not__ to change the object being copied from).
-Not a good choice.
-2) `T(const T &)` -- *const copy constructor*; correct form of copy constructor. It is also slow as the
-previous variant (the reasons are the same), but at least cannot change the transmitted object (because the reference
-to it is const).
-3) `T(T &&)` -- *non-const move constructor*; correct form of move constructor. Rvalue is temporary object,
-so we often want to change it, "throwing out" unnecessary data and obtaining it from the given object.
+1) `T(T &)` -- _non-const copy constructor_; it is considered to be slow (because of copying contents
+from argument object to a new object) and even dangerous, as it is possible to corrupt the transmitted
+object since the reference to it is non-const (the author of the readme file assumes it is common to
+__not__ to change the object being copied from). Not a good choice.
+2) `T(const T &)` -- _const copy constructor_; correct form of copy constructor. It is also slow as the
+previous variant (the reasons are the same), but at least cannot change the transmitted object (because
+the reference to it is const).
+3) `T(T &&)` -- _non-const move constructor_; correct form of move constructor. Rvalue is temporary object,
+so we usually want to change it, "throwing out" unnecessary data and obtaining it from the given object.
 As it is a move constructor, it is a better choice for program rapidity comparing to the copy constructor
 as it does not spend time and resources on copying. However, it "steals" data from its argument which can cause
 troubles: e.g. `free` of some allocated memory in given object's destructor can lead to "double free problem" if
 the pointer to this memory was not assigned to `nullptr` timely.
-4) `T(const T &&)` -- *const move constructor*; as the transmitted object is const, we cannot change it.
+4) `T(const T &&)` -- _const move constructor_; as the transmitted object is const, we cannot change it.
 This obliges us to do deep copying, so this type of move constructor does not do what he is destined to.
 
 ### Small summary
@@ -79,18 +84,24 @@ This obliges us to do deep copying, so this type of move constructor does not do
 | T(T &)        |        Non-safe                 |                          Slow                            | Too dangerous; used rarely, almost never   |
 | T(const T &)  |          Safe                   |                          Slow                            | Does not corrupt the argument, widely used |
 | T(T &&)       | Non-safe (but that is assumed!) |                          Fast                            | Allows rapidly "stealing" data from expiring object, widely used |
-| T(const T &&) | Safe (but that is an absurd!) |                     Fast                            | Saves argument from corruption, but that is nonsense since we cannot extract the data from it rapidly, it forces us to copy and 
+| T(const T &&) | Safe (but that is an absurd!) |                     Fast                            | Saves argument from corruption, but that is nonsense since we cannot extract the data from it rapidly, it forces us to copy and therefore becomes useless.
 
-Situation is quite similar with assignment operators:
 
+The situation is almost similar with assignment operators:
+1) `T &operator =(T &)`
+2) `T &operator =(const T &)`
+3) `T &operator =(T &&)`
+4) `T &operator =(const T &&)`
 
 ***
 ## Investigation
 Only 2) and 3) points from the previous list will be investigated; other two are used seldom or (more likely) 
 not used at all. The program is in `main.cpp` and is quite simple. It creates two variables, sums them and puts 
-the result to the third variable; then it gets divided by the first variable and result is put to the fourth variable. 
+the result to the third variable; then it gets divided by the first variable and result is put to the fourth variable.
+
 Our goal is to decrease the number of copy operations by changing them to move operations as we consider that 
-each copy operation takes __significantly__ more time comparing with move operation and is just too long. 
+each copy operation takes __significantly__ more time comparing with move operation, is just too long and demands
+additional memory.
 It should be mentioned that the program was compiled with `-fno-elide-constructors` 
 flag to prevent automatic optimizations (except the last stage).
 
