@@ -110,19 +110,19 @@ As it is mentioned in the header, there is no move semantics in this case, so th
 quite disappointing: graph is full of unnecessary temporary variables and copy constructor calls.
 tell us program is 
 really slow and uneffective (__six__ copy operations and __four__ temporary variables!): 
-![ALT](pictures/only_copy_ctor.png)
+![ALT](pictures/copy_move.png)
 
 ### Stage 2: program allows copying and moving `DemoInt` variables, `-fno-elide-constructors` is disabled
 Now move constructors are enabled, and therefore the whole picture looks better. However,
 we still have __two__ copy operations and __four__ temporary variables (but now there are __four__ moves):
-![ALT](pictures/copy_and_move_ctors.png)
+![ALT](pictures/copy_no_move.png)
 
 ### Stage 3: replacement of some inefficient code provided
 Soon after move constructors were enabled, a little inefficiency was noticed in the code 
 inside `BINARY_OP_DEMOINT` define.
 `DemoInt this_copy = *this; this_copy op_symb##= other;` was changed to `DemoInt this_copy(this->value_ op_symb other.value_)`.
 The result is __zero__ copies, __four__ moves, but still __four__ temporary variables:
-![ALT](pictures/explicit_copy_removed.png)
+![ALT](pictures/inefficiency_fix.png)
 
 ### Stage 4: compiler's copy elision
 Now we allow compiler to optimize our program. This gives us a significant boost in efficiency,
