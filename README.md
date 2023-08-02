@@ -110,12 +110,12 @@ As it is mentioned in the header, there is no move semantics in this case, so th
 quite disappointing: graph is full of unnecessary temporary variables and copy constructor calls.
 tell us program is 
 really slow and uneffective (__six__ copy operations and __four__ temporary variables!): 
-![ALT](pictures/copy_move.png)
+![ALT](pictures/copy_no_move.png)
 
 ### Stage 2: program allows copying and moving `DemoInt` variables, `-fno-elide-constructors` is disabled
 Now move constructors are enabled, and therefore the whole picture looks better. However,
 we still have __two__ copy operations and __four__ temporary variables (but now there are __four__ moves):
-![ALT](pictures/copy_no_move.png)
+![ALT](pictures/copy_move.png)
 
 ### Stage 3: replacement of some inefficient code provided
 Soon after move constructors were enabled, a little inefficiency was noticed in the code 
