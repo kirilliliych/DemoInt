@@ -18,4 +18,4 @@ int main()
     GraphDrawer::GRAPH_DRAWER_SINGLETON->exit_cluster();
 
     return 0;
-} // коммент рядом с remove reference: дайте тип блин!) 
+}

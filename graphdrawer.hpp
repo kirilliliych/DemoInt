@@ -10,6 +10,7 @@
 static const char *DEFAULT_GRAPH_SOURCE_FILE_NAME  = "tracked_graph.txt";
 static const char *DEFAULT_GRAPH_PICTURE_FILE_NAME = "tracking_picture.png";
 
+<<<<<<< HEAD
 static const char *FUNCTIONS_DARKENING_BACKGROUND   = "#00000025";
 static const char *OP_NODE_COLOR                    = "#340570ff";
 static const char *OP_NODE_FILL_COLOR               = "#9a6ad6ff";
@@ -17,6 +18,15 @@ static const char *EXPLICIT_VARIABLE_FILL_COLOR     = "#5dcec6ff";
 static const char *EXPLICIT_VARIABLE_COLOR          = "#006064ff";
 static const char *TEMP_VARIABLE_NODE_FILL_COLOR    = "#ff7673ff";
 static const char *TEMP_VARIABLE_NODE_COLOR         = "#a62000ff";
+=======
+static const char *FUNCTIONS_DARKENING_BACKGROUND   = "#00000030";
+static const char *OP_NODE_COLOR                    = "#340570ff";
+static const char *OP_NODE_FILL_COLOR               = "#9a6ad6ff";
+static const char *EXPLICIT_VARIABLE_FILL_COLOR     = "#34c6cdff";
+static const char *EXPLICIT_VARIABLE_COLOR          = "#006064ff";
+static const char *TEMP_VARIABLE_NODE_COLOR         = "#a62000ff";
+static const char *TEMP_VARIABLE_NODE_FILL_COLOR    = "#fb3f51ff";
+>>>>>>> c061adf48af3688f7c5f9232f9421f1217736ab4
 
 static const char *DEFAULT_EDGE_COLOR               = "#1533adff";
 static const char *DEFAULT_EDGE_LABEL_COLOR         = "#000000ff";

@@ -32,6 +32,7 @@ GraphDrawer::GraphDrawer(const char *graph_source_file_name, const char *graph_p
 
 GraphDrawer::~GraphDrawer()
 {
+<<<<<<< HEAD
     fprintf(graph_source_file_, "subgraph brief_info1\n"
                                 "{                   \n"
                                 "COPY_CTORS[style=filled, fillcolor=\"%s\", shape=diamond, label=\"COPY_CTORS=%lu\"];\n"
@@ -40,6 +41,7 @@ GraphDrawer::~GraphDrawer()
                                 "MOVE_ASSIGNMENTS[style=filled, fillcolor=\"%s\", shape=diamond, label=\"MOVE_ASSIGNMENTS=%lu\"];\n"
                                 "TEMP_VARIABLES[style=filled, fillcolor=\"%s\", shape=diamond, label=\"TEMP_VARIABLES=%lu\"];\n"
                                 "}\n",
+<<<<<<< HEAD
                                 COPY_CTORS_LABEL_COLOR,                   
                                 GraphDrawer::copy_ctor_counter_,
                                 COPY_ASSIGNMENT_EDGE_COLOR,
@@ -50,6 +52,7 @@ GraphDrawer::~GraphDrawer()
                                 GraphDrawer::move_assignment_counter_,
                                 TEMP_VARIABLE_NODE_FILL_COLOR,
                                 DemoInt::get_temp_counter());
+<<<<<<< HEAD
     fprintf(graph_source_file_, "TEMP_VARIABLES->MOVE_ASSIGNMENTS[style=invis]\n"
                                 "MOVE_ASSIGNMENTS->MOVE_CTORS[style=invis]\n"
                                 "MOVE_CTORS->COPY_ASSIGNMENTS[style=invis]\n"
