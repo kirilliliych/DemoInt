@@ -32,16 +32,15 @@ GraphDrawer::GraphDrawer(const char *graph_source_file_name, const char *graph_p
 
 GraphDrawer::~GraphDrawer()
 {
-    fprintf(graph_source_file_, "subgraph brief_info\n"
-                                "{                  \n"
-                                "rankdir=TB;"
+    fprintf(graph_source_file_, "subgraph brief_info1\n"
+                                "{                   \n"
                                 "COPY_CTORS[style=filled, fillcolor=\"%s\", shape=diamond, label=\"COPY_CTORS=%lu\"];\n"
                                 "COPY_ASSIGNMENTS[style=filled, fillcolor=\"%s\", shape=diamond, label=\"COPY_ASSIGNMENTS=%lu\"];\n"
                                 "MOVE_CTORS[style=filled, fillcolor=\"%s\", shape=diamond, label=\"MOVE_CTORS=%lu\"];\n"
                                 "MOVE_ASSIGNMENTS[style=filled, fillcolor=\"%s\", shape=diamond, label=\"MOVE_ASSIGNMENTS=%lu\"];\n"
-                                "TEMP_VARIABLES[style=filled, fillcolor=\"%s\", shape=diamond, label=\"=TEMP_VARIABLES=%lu\"];\n"
+                                "TEMP_VARIABLES[style=filled, fillcolor=\"%s\", shape=diamond, label=\"TEMP_VARIABLES=%lu\"];\n"
                                 "}\n",
-                                COPY_EDGE_COLOR,                   
+                                COPY_CTORS_LABEL_COLOR,                   
                                 GraphDrawer::copy_ctor_counter_,
                                 COPY_ASSIGNMENT_EDGE_COLOR,
                                 GraphDrawer::copy_assignment_counter_,
@@ -51,6 +50,10 @@ GraphDrawer::~GraphDrawer()
                                 GraphDrawer::move_assignment_counter_,
                                 TEMP_VARIABLE_NODE_FILL_COLOR,
                                 DemoInt::get_temp_counter());
+    fprintf(graph_source_file_, "TEMP_VARIABLES->MOVE_ASSIGNMENTS[style=invis]\n"
+                                "MOVE_ASSIGNMENTS->MOVE_CTORS[style=invis]\n"
+                                "MOVE_CTORS->COPY_ASSIGNMENTS[style=invis]\n"
+                                "COPY_ASSIGNMENTS->COPY_CTORS[style=invis]\n");
 
     fprintf(graph_source_file_, "}\n");
 

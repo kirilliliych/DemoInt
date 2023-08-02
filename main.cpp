@@ -12,8 +12,10 @@ int main()
     DEMO_INT_CTOR(var2, 228);
     DEMO_INT_CTOR(sum1, var1 + var2);
     DEMO_INT_CTOR(result, sum1 / var1);
+    
+    // vector_test();
 
     GraphDrawer::GRAPH_DRAWER_SINGLETON->exit_cluster();
 
-    return 0;       //repaint pictures...
-}
+    return 0;
+} // коммент рядом с remove reference: дайте тип блин!) 

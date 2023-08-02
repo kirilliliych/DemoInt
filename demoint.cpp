@@ -2,8 +2,8 @@
 #include "graphdrawer.hpp"
 
 
-const size_t OPERATOR_WORD_SIZE                = 9;
-const size_t MAX_DEMO_VERSION_OPERATIONS_LIMIT = 7; 
+const size_t OPERATOR_WORD_SIZE                = 100;
+const size_t MAX_DEMO_VERSION_OPERATIONS_LIMIT = 10000; 
 
 static const char *LIMIT_REACHED_MESSAGE_PART1 = "Sorry, you have reached the limit of operation";
 static const char *LIMIT_REACHED_MESSAGE_PART2 = "with variable";
@@ -67,7 +67,7 @@ DemoInt::DemoInt(const DemoInt &other, const std::string &name, std::ostream &lo
     if (other.uses_left_ <= 0)
     {
         std::string func_name = "copy";
-        other.display_limit_msg_(cut_operator_word(&func_name));
+        other.display_limit_msg_(func_name.c_str());
 
         return;
     }
@@ -451,9 +451,8 @@ DemoInt DemoInt::operator op_symb(const DemoInt &other)                         
         }                                                                                               \
     }                                                                                                   \
                                                                                                         \
+    DemoInt result = *this; result op_symb##= other;                                                    \
     /*DemoInt result(this->value_ op_symb other.value_);*/                                              \
-    DemoInt result = *this; \
-    result op_symb##= other; \
                                                                                                         \
     std::string add_to_history = "= '" + name_                                                          \
                                        + "'("                                                           \

@@ -14,7 +14,7 @@ class GraphDrawer;
 
 
 #define COPY_CTOR
-// #define MOVE_CTOR
+#define MOVE_CTOR
 
 #define DEMO_INT_CTOR(var_name, int_value) DemoInt var_name(int_value, #var_name)
 #define DEMO_INT_COPY_CTOR(var_name, var_to_copy_name) DemoInt var_name(var_to_copy_name)
