@@ -32,7 +32,7 @@ fully separated from the previous one. In this case any changes to one of these 
 influence the other: both of them are autonomic.
 
 #### Here is the illustration:
-![ALT](pictures/shallow_and_deep_copy.png) CHANGE PICTURE
+![ALT](pictures/shallow_and_deep_copy.png)
 
 ***
 ## Move semantics
